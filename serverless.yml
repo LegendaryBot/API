@@ -110,7 +110,7 @@ functions:
 custom:
   customDomain:
     domainName: legendarybotapi.greatmancode.com
-    stage: dev
+    stage: *
     basePath: api
     certificateName: legendarybotapi.greatmancode.com
     createRoute53Record: false
