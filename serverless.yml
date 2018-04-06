@@ -53,7 +53,7 @@ package:
 
 functions:
   get-character:
-    handler: com.greatmancode.legendarybotapi.GetCharacterHandler
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetCharacterHandler
     events:
       - http:
           path: /character/{region}/{realm}/{character}

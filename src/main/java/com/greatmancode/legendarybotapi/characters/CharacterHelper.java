@@ -1,19 +1,14 @@
-package com.greatmancode.legendarybotapi;
+package com.greatmancode.legendarybotapi.characters;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import com.greatmancode.legendarybotapi.utils.HeroClass;
 import com.greatmancode.legendarybotapi.utils.HeroRace;
 import com.greatmancode.legendarybotapi.utils.WoWUtils;
-import com.serverless.ApiGatewayResponse;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
 import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,25 +21,21 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-public class GetCharacterHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
-    private static final Logger LOG = Logger.getLogger(GetCharacterHandler.class);
-    private final OkHttpClient client = new OkHttpClient.Builder()
+public class CharacterHelper {
+
+
+    private static final OkHttpClient client = new OkHttpClient.Builder()
             .build();
-    OkHttpClient clientBattleNet = new OkHttpClient.Builder()
+    private static final OkHttpClient clientBattleNet = new OkHttpClient.Builder()
             .addInterceptor(new BattleNetAPIInterceptor())
             .connectionPool(new ConnectionPool(300, 1, TimeUnit.SECONDS))
             .build();
-    @Override
-    public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
-        LOG.info("Received:" + input);
+
+    public static org.json.JSONObject getCharacterStatsEmbed(String region, String realm, String character) {
         org.json.JSONObject responseBody = null;
-        Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
-        String serverName = pathParameters.get("realm");
-        String region = pathParameters.get("region");
-        String character = pathParameters.get("character");
         try {
             JSONParser parser = new JSONParser();
-            String serverSlug = serverName; //TODO real slug support
+            String serverSlug = realm; //TODO real slug support
 
             HttpUrl url = new HttpUrl.Builder().scheme("https")
                     .host("raider.io")
@@ -243,9 +234,7 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
                     JSONObject battleNetObject = (JSONObject) parser.parse(battlenetResult);
                     if (battleNetObject.containsKey("status")) {
                         //Error
-                        return ApiGatewayResponse.builder()
-                                .setStatusCode(404)
-                                .build();
+                        return null;
                     }
 
                     StringBuilder titleBuilder = new StringBuilder();
@@ -303,15 +292,8 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
             e.printStackTrace();
             //TODO error handling
         }
-
-
-
-        return ApiGatewayResponse.builder()
-                .setStatusCode(200)
-                .setRawBody(responseBody.toString())
-                .build();
+        return responseBody;
     }
-
     private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
     static {
         suffixes.put(1_000L, "k");
@@ -322,7 +304,7 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
         suffixes.put(1_000_000_000_000_000_000L, "quintillions");
     }
 
-    public String format(long value) {
+    public static String format(long value) {
         //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
         if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
         if (value < 0) return "-" + format( -value);
@@ -337,7 +319,7 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
         return hasDecimal ? (truncated / 10d) + " " +  suffix : (truncated / 10) + " " + suffix;
     }
 
-    public String getAP( String json) throws ParseException {
+    public static String getAP( String json) throws ParseException {
         long apAmount = -1;
         if (json != null) {
             JSONParser parser = new JSONParser();
@@ -363,7 +345,7 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
 
     }
 
-    public long getM5(String json) throws ParseException {
+    public static long getM5(String json) throws ParseException {
         long m5 = 0;
         if (json != null) {
             JSONParser parser = new JSONParser();
@@ -387,7 +369,7 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
         return m5;
     }
 
-    public long getM10(String json) throws ParseException {
+    public static long getM10(String json) throws ParseException {
         long m10 = 0;
         if (json != null) {
             JSONParser parser = new JSONParser();
@@ -411,7 +393,7 @@ public class GetCharacterHandler implements RequestHandler<Map<String, Object>, 
         return m10;
     }
 
-    public long getM15(String json) throws ParseException {
+    public static long getM15(String json) throws ParseException {
         long m15 = 0;
         if (json != null) {
             JSONParser parser = new JSONParser();
