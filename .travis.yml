@@ -1,4 +1,5 @@
 language: java
 script:
-  - npm install serverless serverless-domain-manager -g
+  - npm install serverless -g
+  - npm install serverless-domain-manager --save-dev
   - serverless deploy
