@@ -59,10 +59,10 @@ functions:
           path: /character/{region}/{realm}/{character}
           method: get
     environment:
-      US_KEY: ${env.US_KEY}
-      US_SECRET: ${env.US_SECRET}
-      EU_KEY: ${env.EU_KEY}
-      EU_SECRET: ${env.EU_SECRET}
+      US_KEY: ${env:US_KEY}
+      US_SECRET: ${env:US_SECRET}
+      EU_KEY: ${env:EU_KEY}
+      EU_SECRET: ${env:EU_SECRET}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
