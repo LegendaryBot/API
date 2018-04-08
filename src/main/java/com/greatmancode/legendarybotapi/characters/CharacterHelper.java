@@ -187,7 +187,7 @@ public class CharacterHelper {
                         runsBuilder.append("**](");
                         runsBuilder.append(run.get("url"));
                         runsBuilder.append(")\n");
-                        long time = (long) run.get("clear_time_ms");
+                        long time = run.getLong("clear_time_ms");
                         long hours = TimeUnit.MILLISECONDS.toHours(time);
                         long minutes = TimeUnit.MILLISECONDS.toMinutes(time);
                         long seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time));
