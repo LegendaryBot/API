@@ -20,6 +20,22 @@ service:
 provider:
   name: aws
   runtime: java8
+  environment:
+    DYNAMODB_TABLE: LegendaryBot_item
+    US_KEY: ${env:US_KEY}
+    US_SECRET: ${env:US_SECRET}
+    EU_KEY: ${env:EU_KEY}
+    EU_SECRET: ${env:EU_SECRET}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 plugins:
   - serverless-domain-manager
@@ -58,11 +74,13 @@ functions:
       - http:
           path: /character/{region}/{realm}/{character}
           method: get
-    environment:
-      US_KEY: ${env:US_KEY}
-      US_SECRET: ${env:US_SECRET}
-      EU_KEY: ${env:EU_KEY}
-      EU_SECRET: ${env:EU_SECRET}
+  get-item:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGEtItemHandler
+    events:
+      - http:
+          path: /item/{region}/{id}
+          method: get
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -107,6 +125,22 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
 custom:
   customDomain:
     domainName: legendarybotapi.greatmancode.com
@@ -115,3 +149,4 @@ custom:
     certificateName: legendarybotapi.greatmancode.com
     createRoute53Record: false
     endpointType: 'edge'
+

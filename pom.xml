@@ -57,6 +57,13 @@
         <artifactId>scribejava-core</artifactId>
         <version>5.0.0</version>
     </dependency>
+      <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb -->
+      <dependency>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-java-sdk-dynamodb</artifactId>
+          <version>1.11.311</version>
+      </dependency>
+
       <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
