@@ -320,7 +320,7 @@ public class CharacterHelper {
             JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
             for (int i = 0; i < criteriaObject.length(); i++) {
-                if ((long)criteriaObject.get(i) == 30103) {
+                if (criteriaObject.getInt(i) == 30103) {
                     criteriaNumber = i;
                 }
             }
@@ -345,7 +345,7 @@ public class CharacterHelper {
             JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
             for (int i = 0; i < criteriaObject.length(); i++) {
-                if ((long)criteriaObject.get(i) == 33097) {
+                if (criteriaObject.getInt(i) == 33097) {
                     criteriaNumber = i;
                 }
             }
@@ -368,7 +368,7 @@ public class CharacterHelper {
             JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
             for (int i = 0; i < criteriaObject.length(); i++) {
-                if ((long)criteriaObject.get(i) == 33098) {
+                if (criteriaObject.getInt(i) == 33098) {
                     criteriaNumber = i;
                 }
             }
@@ -391,7 +391,7 @@ public class CharacterHelper {
             JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
             for (int i = 0; i < criteriaObject.length(); i++) {
-                if ((long)criteriaObject.get(i) == 32028    ) {
+                if (criteriaObject.getInt(i) == 32028    ) {
                     criteriaNumber = i;
                 }
             }
