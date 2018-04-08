@@ -2,6 +2,7 @@ package com.greatmancode.legendarybotapi.item;
 
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import okhttp3.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -24,10 +25,13 @@ public class ItemHelper {
             try {
                 Response responseBattleNet = clientBattleNet.newCall(webRequest).execute();
                 String itemRequest = responseBattleNet.body().string();
-                item = new ItemImpl();
-                item.setid(id);
-                item.setJson(itemRequest);
-                ItemBackend.saveItem(item);
+                JSONObject jsonObject = new JSONObject(itemRequest);
+                if (!jsonObject.has("status")) {
+                    item = new ItemImpl();
+                    item.setid(id);
+                    item.setJson(itemRequest);
+                    ItemBackend.saveItem(item);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
