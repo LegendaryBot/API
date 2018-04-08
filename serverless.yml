@@ -77,6 +77,7 @@ functions:
           method: get
   get-item:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetItemHandler
+    timeout: 15
     events:
       - http:
           path: /item/{region}/{id}
