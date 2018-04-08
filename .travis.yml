@@ -1,6 +1,7 @@
 language: java
 script:
   - mvn test
+after_success:
   - npm install serverless -g
   - npm install serverless-domain-manager --save-dev
   - serverless deploy
