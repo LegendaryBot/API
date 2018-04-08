@@ -76,7 +76,7 @@ functions:
           path: /character/{region}/{realm}/{character}
           method: get
   get-item:
-    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGEtItemHandler
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetItemHandler
     events:
       - http:
           path: /item/{region}/{id}

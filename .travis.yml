@@ -2,5 +2,5 @@ language: java
 script:
   - mvn test
   - npm install serverless -g
-  - npm install serverless-domain-manager serverless-dynamodb-autoscaling --save-dev
+  - npm install serverless-domain-manager --save-dev
   - serverless deploy
