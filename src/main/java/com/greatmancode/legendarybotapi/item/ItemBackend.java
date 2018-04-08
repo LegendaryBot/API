@@ -7,7 +7,6 @@ public class ItemBackend {
 
 
     public static Item getItem(int id) {
-        DynamoDBHelper.createTable(DynamoDBItem.class);
         return DynamoDBHelper.getItem(id);
     }
 
