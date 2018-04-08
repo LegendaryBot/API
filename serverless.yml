@@ -70,6 +70,7 @@ package:
 functions:
   get-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetCharacterHandler
+    timeout: 15
     events:
       - http:
           path: /character/{region}/{realm}/{character}
