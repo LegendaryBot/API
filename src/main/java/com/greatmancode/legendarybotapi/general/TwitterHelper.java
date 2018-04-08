@@ -29,7 +29,7 @@ public class TwitterHelper {
         }
         String username;
         if (region.equalsIgnoreCase("eu")) {
-            username = "blizzardcs_eu";
+            username = "blizzardcseu_en";
         } else {
             username = "blizzardcs";
         }
