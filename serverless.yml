@@ -26,6 +26,8 @@ provider:
     US_SECRET: ${env:US_SECRET}
     EU_KEY: ${env:EU_KEY}
     EU_SECRET: ${env:EU_SECRET}
+    TWITTER_KEY: ${env:TWITTER_KEY}
+    TWITTER_SECRET: ${env:TWITTER_SECRET}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -81,6 +83,13 @@ functions:
     events:
       - http:
           path: /item/{region}/{id}
+          method: get
+  get-lasttweet:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetLastTweetHandler
+    timeout: 15
+    events:
+      - http:
+          path: /twitter/{region}
           method: get
 
 #    The following are a few example events you can configure

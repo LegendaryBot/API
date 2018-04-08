@@ -11,7 +11,7 @@ import com.greatmancode.legendarybotapi.item.Item;
 
 public class DynamoDBHelper {
 
-    private static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
+    private static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(System.getenv("AWS_REGION")).build();
     private static DynamoDBMapper mapper = new DynamoDBMapper(client);
     public static void createTable(Class clazz) {
         if (clazz.isAnnotationPresent(DynamoDBTable.class)) {
