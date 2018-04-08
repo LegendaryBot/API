@@ -9,10 +9,8 @@ import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -32,9 +30,8 @@ public class CharacterHelper {
             .build();
 
     public static org.json.JSONObject getCharacterStatsEmbed(String region, String realm, String character) {
-        org.json.JSONObject responseBody = null;
+        JSONObject responseBody = null;
         try {
-            JSONParser parser = new JSONParser();
             String serverSlug = realm; //TODO real slug support
 
             HttpUrl url = new HttpUrl.Builder().scheme("https")
@@ -48,19 +45,19 @@ public class CharacterHelper {
             Request request = new Request.Builder().url(url).build();
             String result = client.newCall(request).execute().body().string();
             if (result != null) {
-                JSONObject jsonObject = (JSONObject) parser.parse(result);
-                if (!jsonObject.containsKey("error")) {
+                JSONObject jsonObject = new JSONObject(result);
+                if (!jsonObject.has("error")) {
 
                     EmbedBuilder eb = new EmbedBuilder();
-                    if (jsonObject.get("name").equals("Pepyte") && jsonObject.get("realm").equals("Arthas")) {
+                    if (jsonObject.getString("name").equals("Pepyte") && jsonObject.getString("realm").equals("Arthas")) {
                         eb.setThumbnail("https://lumiere-a.akamaihd.net/v1/images/b5e11dc889c5696799a6bd3ec5d819c1f7dfe8b4.jpeg");
-                    } else if (jsonObject.get("name").equals("Xdntgivitoya") && jsonObject.get("realm").equals("Arthas")) {
+                    } else if (jsonObject.getString("name").equals("Xdntgivitoya") && jsonObject.getString("realm").equals("Arthas")) {
                         eb.setThumbnail("https://cdn.discordapp.com/attachments/239729214004133889/389452254823841792/20171210_112359.jpg");
                     } else {
-                        eb.setThumbnail(jsonObject.get("thumbnail_url").toString());
+                        eb.setThumbnail(jsonObject.getString("thumbnail_url"));
                     }
 
-                    String className = jsonObject.get("class").toString().toLowerCase();
+                    String className = jsonObject.getString("class").toLowerCase();
                     eb.setColor(WoWUtils.getClassColor(className));
 
                     StringBuilder titleBuilder = new StringBuilder();
@@ -85,12 +82,12 @@ public class CharacterHelper {
 
 
                     StringBuilder progressionBuilder = new StringBuilder();
-                    JSONObject raidProgression = (JSONObject) jsonObject.get("raid_progression");
-                    JSONObject emeraldNightmare = (JSONObject) raidProgression.get("the-emerald-nightmare");
-                    JSONObject trialOfValor = (JSONObject) raidProgression.get("trial-of-valor");
-                    JSONObject theNighthold = (JSONObject) raidProgression.get("the-nighthold");
-                    JSONObject tombOfSargeras = (JSONObject) raidProgression.get("tomb-of-sargeras");
-                    JSONObject antorus = (JSONObject) raidProgression.get("antorus-the-burning-throne");
+                    JSONObject raidProgression = jsonObject.getJSONObject("raid_progression");
+                    JSONObject emeraldNightmare = raidProgression.getJSONObject("the-emerald-nightmare");
+                    JSONObject trialOfValor = raidProgression.getJSONObject("trial-of-valor");
+                    JSONObject theNighthold = raidProgression.getJSONObject("the-nighthold");
+                    JSONObject tombOfSargeras = raidProgression.getJSONObject("tomb-of-sargeras");
+                    JSONObject antorus = raidProgression.getJSONObject("antorus-the-burning-throne");
                     progressionBuilder.append("**EN**: ");
                     progressionBuilder.append(emeraldNightmare.get("summary"));
                     progressionBuilder.append(" - ");
@@ -118,7 +115,7 @@ public class CharacterHelper {
                     String battlenetResult = clientBattleNet.newCall(battlenetRequest).execute().body().string();
                     String apAmount = getAP(battlenetResult);
 
-                    JSONObject gear = (JSONObject) jsonObject.get("gear");
+                    JSONObject gear = jsonObject.getJSONObject("gear");
                     eb.addField("iLVL", gear.get("item_level_equipped") + "/" + gear.get("item_level_total"), true);
 
                     if (apAmount != null) {
@@ -130,22 +127,22 @@ public class CharacterHelper {
 
 
 
-                    JSONObject mplusRank = (JSONObject) jsonObject.get("mythic_plus_scores");
+                    JSONObject mplusRank = jsonObject.getJSONObject("mythic_plus_scores");
                     eb.addField("Mythic+ Score", mplusRank.get("all").toString(), true);
-                    JSONObject lastMplusRank = (JSONObject) jsonObject.get("previous_mythic_plus_scores");
-                    float lastSeasonScore = Float.parseFloat(lastMplusRank.get("all").toString());
-                    float currentSeasonScore = Float.parseFloat(mplusRank.get("all").toString());
+                    JSONObject lastMplusRank = jsonObject.getJSONObject("previous_mythic_plus_scores");
+                    double lastSeasonScore = lastMplusRank.getDouble("all");
+                    double currentSeasonScore = mplusRank.getDouble("all");
                     if (lastSeasonScore > currentSeasonScore || lastSeasonScore == 0) {
                         eb.addField("Last Season M+ Score", lastMplusRank.get("all").toString(), true);
                     } else {
                         //Field Unused. Let's put something else.
-                        JSONObject battleNetJSON = (JSONObject) parser.parse(battlenetResult);
-                        JSONObject statsJSON = (JSONObject) battleNetJSON.get("stats");
+                        JSONObject battleNetJSON = new JSONObject(battlenetResult);
+                        JSONObject statsJSON = battleNetJSON.getJSONObject("stats");
                         //TODO Translate this
                         StringBuilder statsBuilder = new StringBuilder();
-                        long str = (long) statsJSON.get("str");
-                        long agi = (long) statsJSON.get("agi");
-                        long intel = (long) statsJSON.get("int");
+                        long str = statsJSON.getLong("str");
+                        long agi = statsJSON.getLong("agi");
+                        long intel = statsJSON.getLong("int");
                         if (str > agi && str > intel) {
                             statsBuilder.append("**STR**: ");
                             statsBuilder.append(str);
@@ -180,7 +177,7 @@ public class CharacterHelper {
 
 
                     StringBuilder runsBuilder = new StringBuilder();
-                    JSONArray bestRuns = (JSONArray) jsonObject.get("mythic_plus_best_runs");
+                    JSONArray bestRuns = jsonObject.getJSONArray("mythic_plus_best_runs");
                     for (Object runObject : bestRuns) {
                         JSONObject run = (JSONObject) runObject;
                         runsBuilder.append("[");
@@ -231,8 +228,8 @@ public class CharacterHelper {
                     Request battlenetRequest = new Request.Builder().url(battleneturl).build();
                     String battlenetResult = clientBattleNet.newCall(battlenetRequest).execute().body().string();
 
-                    JSONObject battleNetObject = (JSONObject) parser.parse(battlenetResult);
-                    if (battleNetObject.containsKey("status")) {
+                    JSONObject battleNetObject = new JSONObject(battlenetResult);
+                    if (battleNetObject.has("status")) {
                         //Error
                         return null;
                     }
@@ -244,11 +241,10 @@ public class CharacterHelper {
                     titleBuilder.append(" - ");
                     titleBuilder.append(region.toUpperCase());
                     titleBuilder.append(" | ");
-                    titleBuilder.append(HeroRace.values()[((Long) battleNetObject.get("race")).intValue()]);
+                    titleBuilder.append(HeroRace.values()[battleNetObject.getInt("race")]);
                     titleBuilder.append(" ");
-                    titleBuilder.append(HeroClass.values()[((Long) battleNetObject.get("class")).intValue()]);
+                    titleBuilder.append(HeroClass.values()[battleNetObject.getInt("class")]);
                     titleBuilder.append(" ");
-                    //event.getChannel().sendMessage(jsonObject.get("message").toString()).queue();
 
                     String wowLink = null;
 
@@ -262,7 +258,7 @@ public class CharacterHelper {
                     eb.setTitle(titleBuilder.toString(), wowLink);
                     eb.setThumbnail("http://render-" + region.toLowerCase() + ".worldofwarcraft.com/character/" + battleNetObject.get("thumbnail"));
                     String apAmount = getAP(battlenetResult);
-                    JSONObject gear = (JSONObject) battleNetObject.get("items");
+                    JSONObject gear = battleNetObject.getJSONObject("items");
                     eb.addField("iLVL", gear.get("averageItemLevelEquipped") + "/" + gear.get("averageItemLevel"), true);
 
                     if (apAmount != null) {
@@ -286,9 +282,6 @@ public class CharacterHelper {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO error handling
-        } catch (ParseException e) {
             e.printStackTrace();
             //TODO error handling
         }
@@ -319,22 +312,21 @@ public class CharacterHelper {
         return hasDecimal ? (truncated / 10d) + " " +  suffix : (truncated / 10) + " " + suffix;
     }
 
-    public static String getAP( String json) throws ParseException {
+    public static String getAP( String json){
         long apAmount = -1;
         if (json != null) {
-            JSONParser parser = new JSONParser();
-            JSONObject battleNetCharacter = (JSONObject) parser.parse(json);
-            JSONObject achivements = (JSONObject) battleNetCharacter.get("achievements");
-            JSONArray criteriaObject = (JSONArray) achivements.get("criteria");
+            JSONObject battleNetCharacter = new JSONObject(json);
+            JSONObject achivements = battleNetCharacter.getJSONObject("achievements");
+            JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
-            for (int i = 0; i < criteriaObject.size(); i++) {
+            for (int i = 0; i < criteriaObject.length(); i++) {
                 if ((long)criteriaObject.get(i) == 30103) {
                     criteriaNumber = i;
                 }
             }
 
             if (criteriaNumber != -1) {
-                apAmount = (long) ((JSONArray)achivements.get("criteriaQuantity")).get(criteriaNumber);
+                apAmount = (long) achivements.getJSONArray("criteriaQuantity").get(criteriaNumber);
             }
         }
         String result = null;
@@ -345,22 +337,21 @@ public class CharacterHelper {
 
     }
 
-    public static long getM5(String json) throws ParseException {
+    public static long getM5(String json){
         long m5 = 0;
         if (json != null) {
-            JSONParser parser = new JSONParser();
-            JSONObject battleNetCharacter = (JSONObject) parser.parse(json);
-            JSONObject achivements = (JSONObject) battleNetCharacter.get("achievements");
-            JSONArray criteriaObject = (JSONArray) achivements.get("criteria");
+            JSONObject battleNetCharacter = new JSONObject(json);
+            JSONObject achivements = battleNetCharacter.getJSONObject("achievements");
+            JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
-            for (int i = 0; i < criteriaObject.size(); i++) {
+            for (int i = 0; i < criteriaObject.length(); i++) {
                 if ((long)criteriaObject.get(i) == 33097) {
                     criteriaNumber = i;
                 }
             }
 
             if (criteriaNumber != -1) {
-                m5 = (long) ((JSONArray)achivements.get("criteriaQuantity")).get(criteriaNumber);
+                m5 = (long) achivements.getJSONArray("criteriaQuantity").get(criteriaNumber);
                 if (m5 >= 1) {
                     m5 += 1;
                 }
@@ -369,22 +360,21 @@ public class CharacterHelper {
         return m5;
     }
 
-    public static long getM10(String json) throws ParseException {
+    public static long getM10(String json) {
         long m10 = 0;
         if (json != null) {
-            JSONParser parser = new JSONParser();
-            JSONObject battleNetCharacter = (JSONObject) parser.parse(json);
-            JSONObject achivements = (JSONObject) battleNetCharacter.get("achievements");
-            JSONArray criteriaObject = (JSONArray) achivements.get("criteria");
+            JSONObject battleNetCharacter = new JSONObject(json);
+            JSONObject achivements = battleNetCharacter.getJSONObject("achievements");
+            JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
-            for (int i = 0; i < criteriaObject.size(); i++) {
+            for (int i = 0; i < criteriaObject.length(); i++) {
                 if ((long)criteriaObject.get(i) == 33098) {
                     criteriaNumber = i;
                 }
             }
 
             if (criteriaNumber != -1) {
-                m10 = (long) ((JSONArray)achivements.get("criteriaQuantity")).get(criteriaNumber);
+                m10 = (long) achivements.getJSONArray("criteriaQuantity").get(criteriaNumber);
                 if (m10 >= 1) {
                     m10 += 1;
                 }
@@ -393,22 +383,21 @@ public class CharacterHelper {
         return m10;
     }
 
-    public static long getM15(String json) throws ParseException {
+    public static long getM15(String json) {
         long m15 = 0;
         if (json != null) {
-            JSONParser parser = new JSONParser();
-            JSONObject battleNetCharacter = (JSONObject) parser.parse(json);
-            JSONObject achivements = (JSONObject) battleNetCharacter.get("achievements");
-            JSONArray criteriaObject = (JSONArray) achivements.get("criteria");
+            JSONObject battleNetCharacter = new JSONObject(json);
+            JSONObject achivements = battleNetCharacter.getJSONObject("achievements");
+            JSONArray criteriaObject = achivements.getJSONArray("criteria");
             int criteriaNumber = -1;
-            for (int i = 0; i < criteriaObject.size(); i++) {
+            for (int i = 0; i < criteriaObject.length(); i++) {
                 if ((long)criteriaObject.get(i) == 32028    ) {
                     criteriaNumber = i;
                 }
             }
 
             if (criteriaNumber != -1) {
-                m15 = (long) ((JSONArray)achivements.get("criteriaQuantity")).get(criteriaNumber);
+                m15 = (long) achivements.getJSONArray("criteriaQuantity").get(criteriaNumber);
                 if (m15 >= 1) {
                     m15 += 1;
                 }
