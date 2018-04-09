@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class ItemTest {
 
     @Test
-    void testItem() {
+    public void testItem() {
 
        assertNotNull(ItemHelper.getItem("us", 132455));
     }

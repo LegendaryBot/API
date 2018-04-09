@@ -23,7 +23,7 @@ public class LegionBuildingHelper {
         try {
             Document document = Jsoup.connect("http://www.wowhead.com/").get();
             Element element;
-            if (region.equals("eu")) {
+            if ("eu".equalsIgnoreCase(region)) {
                 element = document.getElementsByClass("tiw-region tiw-region-EU").first();
             } else {
                 element = document.getElementsByClass("tiw-region tiw-region-US tiw-show").first();

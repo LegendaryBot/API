@@ -97,6 +97,7 @@ public class WoWUtils {
                 break;
             default:
                 url = null;
+                break;
         }
         return url;
     }

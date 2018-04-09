@@ -21,15 +21,17 @@ import java.util.concurrent.TimeUnit;
 
 public class CharacterHelper {
 
+    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .build();
+
     private static final OkHttpClient clientBattleNet = new OkHttpClient.Builder()
             .addInterceptor(new BattleNetAPIInterceptor())
             .connectionPool(new ConnectionPool(300, 1, TimeUnit.SECONDS))
             .build();
 
-    public static org.json.JSONObject getCharacterStatsEmbed(String region, String realm, String character) {
+    public static JSONObject getCharacterStatsEmbed(String region, String realm, String character) {
         JSONObject responseBody = null;
         try {
             String serverSlug = realm; //TODO real slug support
@@ -287,7 +289,7 @@ public class CharacterHelper {
         }
         return responseBody;
     }
-    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+
     static {
         suffixes.put(1_000L, "k");
         suffixes.put(1_000_000L, "millions");
@@ -312,7 +314,7 @@ public class CharacterHelper {
         return hasDecimal ? (truncated / 10d) + " " +  suffix : (truncated / 10) + " " + suffix;
     }
 
-    public static String getAP( String json){
+    public static String getAP(String json){
         long apAmount = -1;
         if (json != null) {
             JSONObject battleNetCharacter = new JSONObject(json);

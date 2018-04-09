@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CharacterTest {
 
     @Test
-    void testCharacter() {
+    public void testCharacter() {
         JSONObject object = CharacterHelper.getCharacterStatsEmbed("us","arthas", "Kugruon");
         assertNotNull(object);
         assertTrue(object.getJSONObject("author").getString("name").contains("Kugruon"));

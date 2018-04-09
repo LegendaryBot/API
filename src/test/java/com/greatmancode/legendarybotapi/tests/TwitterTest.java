@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class TwitterTest {
 
     @Test
-    void testTwitter() {
+    public void testTwitter() {
         assertNotNull(TwitterHelper.getLastTweet("us"));
     }
 }

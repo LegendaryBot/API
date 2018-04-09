@@ -44,15 +44,13 @@ public class BattleNetAPIInterceptor implements Interceptor {
      * List containing all available battle.net API keys
      */
     private String usKey;
-    private String usSecret;
     private String euKey;
-    private String euSecret;
-    private static OAuth2AccessToken usToken;
-    private static OAuth20Service usService;
-    private static long usTokenExpire;
-    private static OAuth20Service euService;
-    private static OAuth2AccessToken euToken;
-    private static long euTokenExpire;
+    private OAuth2AccessToken usToken;
+    private OAuth20Service usService;
+    private long usTokenExpire;
+    private OAuth20Service euService;
+    private OAuth2AccessToken euToken;
+    private long euTokenExpire;
 
     /**
      * Build an instance of the Interceptor
@@ -60,9 +58,9 @@ public class BattleNetAPIInterceptor implements Interceptor {
     public BattleNetAPIInterceptor() {
         try {
             usKey = System.getenv("US_KEY");
-            usSecret = System.getenv("US_SECRET");
+            String usSecret = System.getenv("US_SECRET");
             euKey = System.getenv("EU_KEY");
-            euSecret = System.getenv("EU_SECRET");
+            String euSecret = System.getenv("EU_SECRET");
 
             if (usKey == null && euKey == null) {
                 throw new IllegalArgumentException("Blizzard API requires at least one API key.");

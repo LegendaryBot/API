@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class LegionBuildingTest {
 
     @Test
-    void testLegionBuilding() {
+    public void testLegionBuilding() {
         assertNotNull(LegionBuildingHelper.getLegionBuildingStatus("us"));
         assertNotNull(LegionBuildingHelper.getLegionBuildingStatus("eu"));
     }
