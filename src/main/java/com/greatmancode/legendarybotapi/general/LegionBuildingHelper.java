@@ -30,7 +30,7 @@ public class LegionBuildingHelper {
             }
             element.getElementsByClass("tiw-group tiw-bs-building").stream().forEach(building -> {
                 String buildingImageTemp = building.getElementsByClass("tiw-bs-status").first().attributes().get("style");
-                buildingImageTemp = buildingImageTemp.substring(22);
+                buildingImageTemp = buildingImageTemp.substring(23);
                 buildingImageTemp = buildingImageTemp.substring(0,buildingImageTemp.length() - 1);
                 buildingImageTemp = "https://" + buildingImageTemp;
                 buildingImage.add(buildingImageTemp);
