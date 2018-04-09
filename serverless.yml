@@ -91,6 +91,13 @@ functions:
       - http:
           path: /twitter/{region}
           method: get
+  get-legion-building:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetLegionBuildingHandler
+    timeout: 15
+    events:
+      - http:
+          path: /legionbuilding
+          method: get
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
