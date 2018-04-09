@@ -96,7 +96,7 @@ functions:
     timeout: 15
     events:
       - http:
-          path: /legionbuilding
+          path: /legionbuilding/{region}
           method: get
 
 #    The following are a few example events you can configure
