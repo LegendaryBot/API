@@ -16,6 +16,8 @@ public class ItemBackend {
             dynamoDBItem.setid(item.getid());
             dynamoDBItem.setJson(item.getJson());
             DynamoDBHelper.saveItem(dynamoDBItem);
+        } else {
+            DynamoDBHelper.saveItem((DynamoDBItem) item);
         }
     }
 }

@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
 import com.greatmancode.legendarybotapi.item.Item;
 
 public class DynamoDBHelper {
@@ -30,5 +31,13 @@ public class DynamoDBHelper {
 
     public static void saveItem(DynamoDBItem item) {
         mapper.save(item);
+    }
+
+    public static DiscordUser getDiscordUser(int id) {
+        return mapper.load(DynamoDBDiscordUser.class, id);
+    }
+
+    public static void saveDiscordUser(DynamoDBDiscordUser discordUser) {
+        mapper.save(discordUser);
     }
 }
