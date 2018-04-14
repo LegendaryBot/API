@@ -205,7 +205,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
-    DynamoDbTable:
+    DynamoDbTable1:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.DYNAMODB_TABLE_DISCORD_USER}
