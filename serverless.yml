@@ -52,7 +52,7 @@ provider:
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_DISCORD_USER}"
 
-customs:
+custom:
   domains:
     prod: api.legendarybot.info
     master: api-dev.legendarybot.info
