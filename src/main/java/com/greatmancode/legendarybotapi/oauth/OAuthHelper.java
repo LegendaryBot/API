@@ -62,6 +62,7 @@ public class OAuthHelper {
             OAuthRequest request = new OAuthRequest(Verb.GET, "https://"+region+".api.battle.net/wow/user/characters");
             service.signRequest(token, request);
             Response response = service.execute(request);
+            System.out.println(response.getBody());
             JSONObject userJSON = new JSONObject(response.getBody());
             JSONArray characterArray = userJSON.getJSONArray("characters");
 
