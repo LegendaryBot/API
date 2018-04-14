@@ -131,7 +131,7 @@ functions:
     timeout: 15
     events:
       - http:
-          path: /oauth/login
+          path: /oauth/login/{region}/{id}
           method: get
   get-auth-battlenetcallback:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetBattleNetCallback
