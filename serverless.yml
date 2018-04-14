@@ -195,7 +195,7 @@ resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_ITEM}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N

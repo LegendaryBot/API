@@ -4,6 +4,7 @@ script:
 after_success:
   - npm install serverless -g
   - npm install serverless-domain-manager --save-dev
+  - serverless create_domain
   - serverless deploy --conceal
 branches:
   only:
