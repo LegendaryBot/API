@@ -22,10 +22,10 @@ import java.util.concurrent.ExecutionException;
 
 public class OAuthHelper {
 
-    public static String generateLoginURL(String region, int userId) {
+    public static String generateLoginURL(String region, long userId) {
         OAuth20Service service = new ServiceBuilder(System.getenv(region.toUpperCase() + "_KEY"))
                 .scope("wow.profile")
-                .callback("https://legendarybotapi.greatmancode.com/api/oauth/battlenetcallback")
+                .callback("https://"+System.getenv("API_URL")+"/api/oauth/battlenetcallback")
                 .state(region + ":" + userId)
                 .build(new OAuthBattleNetApi(region));
         return service.getAuthorizationUrl();
@@ -51,11 +51,11 @@ public class OAuthHelper {
  */
     public static void handleBattleNetCallback(String code, String state) {
         String region = state.split(":")[0];
-        int userId = Integer.parseInt(state.split(":")[1]);
+        long userId = Long.parseLong(state.split(":")[1]);
         OAuth20Service service = new ServiceBuilder(System.getenv(region.toUpperCase() + "_KEY"))
                 .apiSecret(System.getenv(region.toUpperCase() + "_SECRET"))
                 .scope("wow.profile")
-                .callback("https://legendarybotapi.greatmancode.com/api/oauth/battlenetcallback")
+                .callback("https://"+System.getenv("API_URL")+"/api/oauth/battlenetcallback")
                 .build(new OAuthBattleNetApi(region));
         try {
             OAuth2AccessToken token = service.getAccessToken(code);

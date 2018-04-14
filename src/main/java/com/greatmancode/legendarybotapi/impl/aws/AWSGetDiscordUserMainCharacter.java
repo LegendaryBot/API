@@ -13,8 +13,8 @@ public class AWSGetDiscordUserMainCharacter implements RequestHandler<Map<String
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
-        int userId = Integer.parseInt(pathParameters.get("userId"));
-        int guildId = Integer.parseInt(pathParameters.get("guildId"));
+        long userId = Long.parseLong(pathParameters.get("userId"));
+        long guildId = Long.parseLong(pathParameters.get("guildId"));
         JSONObject mainCharacter = DiscordUserHelper.getGuildMainCharacter(DiscordUserHelper.getDiscordUser(userId), guildId);
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)

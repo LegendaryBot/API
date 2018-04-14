@@ -5,7 +5,7 @@ import com.greatmancode.legendarybotapi.impl.aws.dynamodb.DynamoDBHelper;
 public class ItemBackend {
 
 
-    public static Item getItem(int id) {
+    public static Item getItem(long id) {
         if (System.getenv("AWS_EXECUTION_ENV") != null) {
             return DynamoDBHelper.getItem(id);
         }

@@ -14,8 +14,8 @@ public class AWSSetDiscordUserMainCharacter implements RequestHandler<Map<String
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
-        int userId = Integer.parseInt(pathParameters.get("userId"));
-        int guildId = Integer.parseInt(pathParameters.get("guildId"));
+        long userId = Long.parseLong(pathParameters.get("userId"));
+        long guildId = Long.parseLong(pathParameters.get("guildId"));
         String region = pathParameters.get("region");
         String realm = pathParameters.get("realm");
         try {

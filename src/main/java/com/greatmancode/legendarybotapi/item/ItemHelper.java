@@ -13,7 +13,7 @@ public class ItemHelper {
             .connectionPool(new ConnectionPool(300, 1, TimeUnit.SECONDS))
             .build();
 
-    public static Item getItem(String region, int id) {
+    public static Item getItem(String region, long id) {
         Item item = ItemBackend.getItem(id);
 
         if (item == null) {

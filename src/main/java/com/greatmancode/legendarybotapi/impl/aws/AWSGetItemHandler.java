@@ -15,7 +15,7 @@ public class AWSGetItemHandler implements RequestHandler<Map<String, Object>, Ap
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
         String region = pathParameters.get("region");
         String id = pathParameters.get("id");
-        Item item = ItemHelper.getItem(region,Integer.parseInt(id));
+        Item item = ItemHelper.getItem(region,Long.parseLong(id));
         if (item == null) {
             return ApiGatewayResponse.builder()
                     .setStatusCode(404)

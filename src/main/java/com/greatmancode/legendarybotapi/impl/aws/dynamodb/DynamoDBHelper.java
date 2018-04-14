@@ -15,7 +15,7 @@ public class DynamoDBHelper {
     private static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(System.getenv("AWS_REGION")).build();
     private static DynamoDB dynamoDB = new DynamoDB(client);
 
-    public static Item getItem(int id) {
+    public static Item getItem(long id) {
         Item item = null;
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_ITEM"));
         com.amazonaws.services.dynamodbv2.document.Item entry = table.getItem("id", id);
@@ -33,7 +33,7 @@ public class DynamoDBHelper {
         table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", item.getid()).withJSON("json", item.getJson()));
     }
 
-    public static DiscordUser getDiscordUser(int id) {
+    public static DiscordUser getDiscordUser(long id) {
         DiscordUser user = null;
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_USER"));
         com.amazonaws.services.dynamodbv2.document.Item entry = table.getItem("id", id);

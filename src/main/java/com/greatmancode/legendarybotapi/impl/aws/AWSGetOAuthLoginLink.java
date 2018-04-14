@@ -14,7 +14,7 @@ public class AWSGetOAuthLoginLink implements RequestHandler<Map<String, Object>,
 
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
         String region = pathParameters.get("region");
-        int id = Integer.parseInt(pathParameters.get("id"));
+        long id = Long.parseLong(pathParameters.get("id"));
         Map<String,String> headers = new HashMap<>();
         headers.put("Location", OAuthHelper.generateLoginURL(region,id));
         return ApiGatewayResponse.builder()

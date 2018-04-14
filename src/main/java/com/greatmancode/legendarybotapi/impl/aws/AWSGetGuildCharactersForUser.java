@@ -13,7 +13,7 @@ public class AWSGetGuildCharactersForUser implements RequestHandler<Map<String, 
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
-        int userId = Integer.parseInt(pathParameters.get("userId"));
+        long userId = Long.parseLong(pathParameters.get("userId"));
         String guildName = pathParameters.get("guildName");
         JSONArray characters = DiscordUserHelper.getGuildCharactersForUser(DiscordUserHelper.getDiscordUser(userId), guildName);
         return ApiGatewayResponse.builder()

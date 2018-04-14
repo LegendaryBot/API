@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 public class DiscordUserHelper {
 
-    public static DiscordUser getDiscordUser(int id) {
+    public static DiscordUser getDiscordUser(long id) {
         DiscordUser user = DiscordUserBackend.getDiscordUser(id);
         if (user == null) {
             user = new DiscordUserImpl();
@@ -50,7 +50,7 @@ public class DiscordUserHelper {
         return result;
     }
 
-    public static JSONObject getGuildMainCharacter(DiscordUser user, int id) {
+    public static JSONObject getGuildMainCharacter(DiscordUser user, long id) {
         final JSONObject result = new JSONObject();
         if (user != null) {
             JSONObject jsonObject = new JSONObject(user.getJson());
@@ -58,7 +58,7 @@ public class DiscordUserHelper {
                 jsonObject.getJSONArray("characters").forEach(characterEntry -> {
                     JSONObject character = (JSONObject) characterEntry;
                     if (character.has("mainCharacterForGuild")) {
-                        if (character.getJSONArray("mainCharacterForGuild").toList().stream().filter(value -> (int)value == id).count() == 1) {
+                        if (character.getJSONArray("mainCharacterForGuild").toList().stream().filter(value -> (long)value == id).count() == 1) {
                             result.put("region", character.getString("region"));
                             result.put("realm", character.getString("realm"));
                             result.put("name", character.getString("name"));
@@ -71,7 +71,7 @@ public class DiscordUserHelper {
         return result;
     }
 
-    public static boolean setGuildMainCharacter(DiscordUser user, int guildId, String region, String realm, String name) {
+    public static boolean setGuildMainCharacter(DiscordUser user, long guildId, String region, String realm, String name) {
         boolean found = false;
         if (user != null) {
             JSONObject jsonObject = new JSONObject(user.getJson());
@@ -91,10 +91,10 @@ public class DiscordUserHelper {
                     for (int ii = 0; ii < jsonArray.length(); ii++) {
                         JSONObject character = jsonArray.getJSONObject(ii);
                         if (character.has("mainCharacterForGuild")) {
-                            if (character.getJSONArray("mainCharacterForGuild").toList().stream().filter(value -> (int)value == guildId).count() == 1) {
+                            if (character.getJSONArray("mainCharacterForGuild").toList().stream().filter(value -> (long)value == guildId).count() == 1) {
                                 Iterator<Object> iterator = character.getJSONArray("mainCharacterForGuild").iterator();
                                 while (iterator.hasNext()) {
-                                    int value = (int)iterator.next();
+                                    long value = (long)iterator.next();
                                     if (value == guildId) {
                                         iterator.remove();
                                     }
