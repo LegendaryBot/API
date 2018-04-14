@@ -20,8 +20,12 @@ service:
 provider:
   name: aws
   runtime: java8
+  stage: ${env:TRAVIS_BRANCH}
+  apiKeys:
+    - LegendaryBot-Production
   environment:
-    DYNAMODB_TABLE: LegendaryBot_item
+    DYNAMODB_TABLE_ITEM: LegendaryBot_item-${env:TRAVIS_BRANCH}
+    DYNAMODB_TABLE_DISCORD_USER: LegendaryBot_discordUser-${env:TRAVIS_BRANCH}
     US_KEY: ${env:US_KEY}
     US_SECRET: ${env:US_SECRET}
     EU_KEY: ${env:EU_KEY}
@@ -37,8 +41,21 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_ITEM}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_DISCORD_USER}"
 
+customs:
+  domains:
+    prod: api.legendarybot.info
+    master: api-dev.legendarybot.info
 plugins:
   - serverless-domain-manager
 # you can overwrite defaults here
@@ -97,6 +114,35 @@ functions:
     events:
       - http:
           path: /legionbuilding/{region}
+          method: get
+  get-discord-user-main-character:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordUserMainCharacter
+    timeout: 15
+    events:
+      - http:
+          path: /discorduser/{userId}/character/{guildId}
+          method: get
+  set-discord-user-main-character:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordUserMainCharacter
+    timeout: 15
+    events:
+      - http:
+          path: /discorduser/{userId}/character/{guildId}/{region}/{realm}/{character}
+          method: post
+          private: true
+  get-auth-battlenet:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetOAuthLoginLink
+    timeout: 15
+    events:
+      - http:
+          path: /oauth/login
+          method: get
+  get-auth-battlenetcallback:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetBattleNetCallback
+    timeout: 15
+    events:
+      - http:
+          path: /oauth/battlenetcallback
           method: get
 
 #    The following are a few example events you can configure
@@ -157,14 +203,25 @@ resources:
           - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_DISCORD_USER}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
 custom:
   customDomain:
-    domainName: legendarybotapi.greatmancode.com
-    stage: dev
+    domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: api
-    certificateName: legendarybotapi.greatmancode.com
     createRoute53Record: false
     endpointType: 'edge'
 

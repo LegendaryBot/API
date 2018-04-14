@@ -2,33 +2,51 @@ package com.greatmancode.legendarybotapi.impl.aws.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
+import com.greatmancode.legendarybotapi.discorduser.DiscordUserImpl;
 import com.greatmancode.legendarybotapi.item.Item;
+import com.greatmancode.legendarybotapi.item.ItemImpl;
+
 
 public class DynamoDBHelper {
 
     private static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(System.getenv("AWS_REGION")).build();
-    private static DynamoDBMapper mapper = new DynamoDBMapper(client);
-    public static void createTable(Class clazz) {
-        if (clazz.isAnnotationPresent(DynamoDBTable.class)) {
-            DynamoDBTable annotation = (DynamoDBTable) clazz.getAnnotation(DynamoDBTable.class);
-            if (!client.listTables().getTableNames().contains(annotation.tableName())) {
-                CreateTableRequest request = mapper.generateCreateTableRequest(clazz);
-                request.setProvisionedThroughput(new ProvisionedThroughput(5L,5L));
-                client.createTable(request);
-            }
-        }
-
-    }
+    private static DynamoDB dynamoDB = new DynamoDB(client);
 
     public static Item getItem(int id) {
-        return mapper.load(DynamoDBItem.class, id);
+        Item item = null;
+        Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_ITEM"));
+        com.amazonaws.services.dynamodbv2.document.Item entry = table.getItem("id", id);
+        if (entry != null) {
+            item = new ItemImpl();
+            item.setid(id);
+            item.setJson(entry.getJSON("json"));
+        }
+
+        return item;
     }
 
-    public static void saveItem(DynamoDBItem item) {
-        mapper.save(item);
+    public static void saveItem(Item item) {
+        Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_ITEM"));
+        table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", item.getid()).withJSON("json", item.getJson()));
+    }
+
+    public static DiscordUser getDiscordUser(int id) {
+        DiscordUser user = null;
+        Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_USER"));
+        com.amazonaws.services.dynamodbv2.document.Item entry = table.getItem("id", id);
+        if (entry != null) {
+            user = new DiscordUserImpl();
+            user.setid(id);
+            user.setJson(entry.getJSON("json"));
+        }
+        return user;
+    }
+
+    public static void saveDiscordUser(DiscordUser discordUser) {
+        Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_USER"));
+        table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", discordUser.getid()).withJSON("json", discordUser.getJson()));
     }
 }

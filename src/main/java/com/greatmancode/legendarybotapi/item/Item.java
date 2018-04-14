@@ -1,10 +1,8 @@
 package com.greatmancode.legendarybotapi.item;
 
-public interface Item {
+import com.greatmancode.legendarybotapi.utils.GenericIdJsonTable;
 
-    int getid();
-    void setid(int id);
+public interface Item extends GenericIdJsonTable {
 
-    String getJson();
-    void setJson(String json);
+
 }
