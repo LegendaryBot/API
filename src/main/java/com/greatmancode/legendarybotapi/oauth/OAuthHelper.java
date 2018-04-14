@@ -113,6 +113,7 @@ public class OAuthHelper {
                     characterArray.put(character);
                 });
             }
+            userJSON.put("characters", characterArray);
             discordUser.setJson(discordUserJSON.toString());
             DiscordUserBackend.saveDiscordUser(discordUser);
         } catch (IOException | InterruptedException | ExecutionException e) {
