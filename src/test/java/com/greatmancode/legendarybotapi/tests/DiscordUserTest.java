@@ -54,9 +54,9 @@ public class DiscordUserTest {
         JSONObject resultSet = new JSONObject(discordUser.getJson());
         JSONArray characterArray = resultSet.getJSONArray("characters");
         JSONObject characterKugruon = characterArray.getJSONObject(0);
-        characterKugruon.getJSONArray("mainCharacterForGuild").forEach(value -> assertNotEquals(value, 1234L));
+        characterKugruon.getJSONArray("mainCharacterForGuild").forEach(value -> assertNotEquals(((Number)value).longValue(), 1234L));
 
         JSONObject characterKogorof = characterArray.getJSONObject(1);
-        characterKogorof.getJSONArray("mainCharacterForGuild").forEach(value -> assertEquals(value, 1234L));
+        characterKogorof.getJSONArray("mainCharacterForGuild").forEach(value -> assertEquals(((Number)value).longValue(), 1234L));
     }
 }
