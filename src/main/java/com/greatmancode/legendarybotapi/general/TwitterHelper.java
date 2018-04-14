@@ -51,7 +51,7 @@ public class TwitterHelper {
                         .addPathSegments("1.1/statuses/user_timeline.json")
                         .addQueryParameter("screen_name", username)
                         .addQueryParameter("exclude_replies", "1")
-                        .addQueryParameter("count", "100")
+                        .addQueryParameter("count", "200")
                         .addQueryParameter("tweet_mode", "extended")
                         .build();
                 request = new Request.Builder().url(url).addHeader("Authorization","Bearer " + bearer).build();

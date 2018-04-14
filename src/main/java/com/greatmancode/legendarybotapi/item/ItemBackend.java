@@ -7,17 +7,22 @@ public class ItemBackend {
 
 
     public static Item getItem(int id) {
-        return DynamoDBHelper.getItem(id);
+        if (System.getenv("AWS_EXECUTION_ENV") != null) {
+            return DynamoDBHelper.getItem(id);
+        }
+        return null;
     }
 
     public static void saveItem(Item item) {
-        if (!(item instanceof DynamoDBItem)) {
-            DynamoDBItem dynamoDBItem = new DynamoDBItem();
-            dynamoDBItem.setid(item.getid());
-            dynamoDBItem.setJson(item.getJson());
-            DynamoDBHelper.saveItem(dynamoDBItem);
-        } else {
-            DynamoDBHelper.saveItem((DynamoDBItem) item);
+        if (System.getenv("AWS_EXECUTION_ENV") != null) {
+            if (!(item instanceof DynamoDBItem)) {
+                DynamoDBItem dynamoDBItem = new DynamoDBItem();
+                dynamoDBItem.setid(item.getid());
+                dynamoDBItem.setJson(item.getJson());
+                DynamoDBHelper.saveItem(dynamoDBItem);
+            } else {
+                DynamoDBHelper.saveItem((DynamoDBItem) item);
+            }
         }
     }
 }

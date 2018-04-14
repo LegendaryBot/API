@@ -4,4 +4,4 @@ script:
 after_success:
   - npm install serverless -g
   - npm install serverless-domain-manager --save-dev
-  - serverless deploy
+  - serverless deploy --conceal
