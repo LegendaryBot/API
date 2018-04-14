@@ -220,7 +220,7 @@ resources:
           WriteCapacityUnits: 2
 custom:
   customDomain:
-    domainName: ${self:custom.domains.${self:custom.stage}}
+    domainName: ${self:custom.domains.${self:provider.stage}}
     basePath: api
     createRoute53Record: false
     endpointType: 'edge'
