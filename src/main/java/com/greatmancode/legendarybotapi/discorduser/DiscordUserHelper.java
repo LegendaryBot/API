@@ -35,6 +35,21 @@ public class DiscordUserHelper {
         }
 
      */
+
+    public static JSONArray getGuildCharactersForUser(DiscordUser user, String guildName) {
+        JSONArray result = new JSONArray();
+        JSONObject userJSON = new JSONObject(user.getJson());
+        if (userJSON.has("characters")) {
+            userJSON.getJSONArray("characters").forEach(characterEntry -> {
+                JSONObject character = (JSONObject) characterEntry;
+                if (character.has("guild") && character.getString("guild").equalsIgnoreCase("guildName")) {
+                    result.put(character);
+                }
+            });
+        }
+        return result;
+    }
+
     public static JSONObject getGuildMainCharacter(DiscordUser user, int id) {
         final JSONObject result = new JSONObject();
         if (user != null) {

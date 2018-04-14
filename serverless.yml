@@ -20,11 +20,12 @@ service:
 provider:
   name: aws
   runtime: java8
+  stage: ${env:TRAVIS_BRANCH}
   apiKeys:
     - LegendaryBot-Production
   environment:
-    DYNAMODB_TABLE_ITEM: LegendaryBot_item
-    DYNAMODB_TABLE_DISCORD_USER: LegendaryBot_discordUser
+    DYNAMODB_TABLE_ITEM: LegendaryBot_item-${env:TRAVIS_BRANCH}
+    DYNAMODB_TABLE_DISCORD_USER: LegendaryBot_discordUser-${env:TRAVIS_BRANCH}
     US_KEY: ${env:US_KEY}
     US_SECRET: ${env:US_SECRET}
     EU_KEY: ${env:EU_KEY}
@@ -125,6 +126,20 @@ functions:
           path: /discorduser/{userId}/character/{guildId}/{region}/{realm}/{character}
           method: post
           private: true
+  get-auth-battlenet:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetOAuthLoginLink
+    timeout: 15
+    events:
+      - http:
+          path: /oauth/login
+          method: get
+  get-auth-battlenetcallback:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetBattleNetCallback
+    timeout: 15
+    events:
+      - http:
+          path: /oauth/battlenetcallback
+          method: get
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -201,10 +216,8 @@ resources:
           WriteCapacityUnits: 2
 custom:
   customDomain:
-    domainName: legendarybotapi.greatmancode.com
-    stage: dev
+    domainName: api.legendarybot.info
     basePath: api
-    certificateName: legendarybotapi.greatmancode.com
     createRoute53Record: false
     endpointType: 'edge'
 
