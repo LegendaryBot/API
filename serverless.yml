@@ -52,10 +52,6 @@ provider:
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_DISCORD_USER}"
 
-custom:
-  domains:
-    prod: api.legendarybot.info
-    master: api-dev.legendarybot.info
 plugins:
   - serverless-domain-manager
 # you can overwrite defaults here
@@ -219,6 +215,9 @@ resources:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
 custom:
+  domains:
+    prod: api.legendarybot.info
+    master: api-dev.legendarybot.info
   customDomain:
     domainName: ${self:custom.domains.${self:provider.stage}}
     basePath: api
