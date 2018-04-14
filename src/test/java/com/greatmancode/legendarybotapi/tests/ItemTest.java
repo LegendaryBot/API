@@ -10,6 +10,6 @@ public class ItemTest {
     @Test
     public void testItem() {
 
-       assertNotNull(ItemHelper.getItem("us", (long)132455));
+       assertNotNull(ItemHelper.getItem("us", 132455L));
     }
 }

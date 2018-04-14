@@ -20,8 +20,8 @@ public class DiscordUserTest {
         character.put("realm", "arthas");
         character.put("name", "Kugruon");
         JSONArray mainCharacterGuild = new JSONArray();
-        mainCharacterGuild.put((long)1234);
-        mainCharacterGuild.put((long)4567);
+        mainCharacterGuild.put(1234L);
+        mainCharacterGuild.put(4567L);
         character.put("mainCharacterForGuild", mainCharacterGuild);
         characters.put(character);
 
@@ -32,31 +32,31 @@ public class DiscordUserTest {
         characters.put(character);
         object.put("characters", characters);
         DiscordUser discordUser = new DiscordUserImpl();
-        discordUser.setid((long)1111);
+        discordUser.setid(1111L);
         discordUser.setJson(object.toString());
 
-        JSONObject mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, (long)1234);
+        JSONObject mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, 1234L);
         assertEquals(mainCharacter.length(), 3);
         assertEquals(mainCharacter.getString("region"), "us");
         assertEquals(mainCharacter.getString("realm"), "arthas");
         assertEquals(mainCharacter.getString("name"), "Kugruon");
 
-        mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, (long)4567);
+        mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, 4567L);
         assertEquals(mainCharacter.length(), 3);
         assertEquals(mainCharacter.getString("region"), "us");
         assertEquals(mainCharacter.getString("realm"), "arthas");
         assertEquals(mainCharacter.getString("name"), "Kugruon");
 
-        mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, (long)3);
+        mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, 3L);
         assertEquals(mainCharacter.length(), 0);
 
-        DiscordUserHelper.setGuildMainCharacter(discordUser, (long)1234, "eu","moon-guard", "Kogorof");
+        DiscordUserHelper.setGuildMainCharacter(discordUser, 1234L, "eu","moon-guard", "Kogorof");
         JSONObject resultSet = new JSONObject(discordUser.getJson());
         JSONArray characterArray = resultSet.getJSONArray("characters");
         JSONObject characterKugruon = characterArray.getJSONObject(0);
-        characterKugruon.getJSONArray("mainCharacterForGuild").forEach(value -> assertNotEquals(value, (long)1234));
+        characterKugruon.getJSONArray("mainCharacterForGuild").forEach(value -> assertNotEquals(value, 1234L));
 
         JSONObject characterKogorof = characterArray.getJSONObject(1);
-        characterKogorof.getJSONArray("mainCharacterForGuild").forEach(value -> assertEquals(value, (long)1234));
+        characterKogorof.getJSONArray("mainCharacterForGuild").forEach(value -> assertEquals(value, 1234L));
     }
 }
