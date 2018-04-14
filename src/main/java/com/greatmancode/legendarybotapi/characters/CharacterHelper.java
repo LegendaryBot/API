@@ -285,7 +285,7 @@ public class CharacterHelper {
                     }
 
                     EmbedBuilder eb = new EmbedBuilder();
-                    eb.setTitle(titleBuilder.toString(), wowLink);
+                    eb.setAuthor(titleBuilder.toString(), wowLink, WoWUtils.getClassIcon(HeroClass.values()[battleNetObject.getInt("class")].name()));
                     eb.setThumbnail("http://render-" + region.toLowerCase() + ".worldofwarcraft.com/character/" + battleNetObject.get("thumbnail"));
                     String apAmount = getAP(battlenetResult);
                     JSONObject gear = battleNetObject.getJSONObject("items");
