@@ -62,62 +62,75 @@ public class OAuthHelper {
             OAuthRequest request = new OAuthRequest(Verb.GET, "https://"+region+".api.battle.net/wow/user/characters");
             service.signRequest(token, request);
             Response response = service.execute(request);
-            System.out.println(response.getBody());
-            JSONObject userJSON = new JSONObject(response.getBody());
-            JSONArray characterArray = userJSON.getJSONArray("characters");
+            handleCharacterUpdate(region, userId, response.getBody());
 
-            //We load the current user.
-            DiscordUser discordUser = DiscordUserHelper.getDiscordUser(userId);
-            JSONObject discordUserJSON = new JSONObject(discordUser.getJson());
-            List<WoWCharacter> existingCharacters = new ArrayList<>();
-            if (discordUserJSON.length() > 0) {
-                if (discordUserJSON.has("characters")) {
-                    discordUserJSON.getJSONArray("characters").forEach(characterEntry -> {
-                        JSONObject character = (JSONObject) characterEntry;
-                        existingCharacters.add(new WoWCharacter(character.getString("region"),character.getString("realm"),character.getString("name"), character.has("guild") ? character.getString("guild") : null));
-                    });
-                }
-            }
-
-            //We now add/remove accordingly
-            List<WoWCharacter> characterToUpdate = new ArrayList<>();
-            characterArray.forEach(characterEntry -> {
-                JSONObject character = (JSONObject) characterEntry;
-                WoWCharacter wowCharacter = new WoWCharacter(region, character.getString("realm").toLowerCase(), character.getString("name"), character.has("guild") ? character.getString("guild") : null);
-                if (existingCharacters.contains(wowCharacter)) {
-                    characterToUpdate.add(wowCharacter);
-                    existingCharacters.remove(wowCharacter);
-                }
-            });
-
-            if (existingCharacters.size() > 0) {
-                //We remove old characters no longer existing.
-                Iterator<Object> characterIterator = characterArray.iterator();
-                while (characterIterator.hasNext()) {
-                    JSONObject character = (JSONObject) characterIterator.next();
-                    WoWCharacter arrayCharactor = new WoWCharacter(character.getString("region"),character.getString("realm"),character.getString("name"), character.has("guild") ? character.getString("guild") : null);
-                    if (existingCharacters.contains(arrayCharactor)) {
-                        characterIterator.remove();
-                        existingCharacters.remove(arrayCharactor);
-                    }
-                }
-            }
-
-            if (characterToUpdate.size() > 0) {
-                characterToUpdate.forEach(characterEntry -> {
-                    JSONObject character = new JSONObject();
-                    character.put("region", region);
-                    character.put("realm", characterEntry.getRealm());
-                    character.put("name", characterEntry.getName());
-                    character.put("guild", characterEntry.getGuild());
-                    characterArray.put(character);
-                });
-            }
-            userJSON.put("characters", characterArray);
-            discordUser.setJson(discordUserJSON.toString());
-            DiscordUserBackend.saveDiscordUser(discordUser);
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public static DiscordUser handleCharacterUpdate(String region, long userId, String json) {
+        JSONObject userJSON = new JSONObject(json);
+        JSONArray blizzardCharacterArray = userJSON.getJSONArray("characters");
+
+        //We load the current user.
+        DiscordUser discordUser = DiscordUserHelper.getDiscordUser(userId);
+        JSONObject discordUserJSON = new JSONObject(discordUser.getJson());
+        JSONArray discordCharacterArray;
+        if (discordUserJSON.has("characters")) {
+            discordCharacterArray = discordUserJSON.getJSONArray("characters");
+        } else {
+            discordCharacterArray = new JSONArray();
+        }
+
+
+        List<WoWCharacter> existingCharacters = new ArrayList<>();
+        if (discordUserJSON.length() > 0) {
+            if (discordUserJSON.has("characters")) {
+                discordUserJSON.getJSONArray("characters").forEach(characterEntry -> {
+                    JSONObject character = (JSONObject) characterEntry;
+                    existingCharacters.add(new WoWCharacter(character.getString("region"),character.getString("realm"),character.getString("name"), character.has("guild") ? character.getString("guild") : null));
+                });
+            }
+        }
+
+        //We now add/remove accordingly
+        List<WoWCharacter> characterToUpdate = new ArrayList<>();
+        blizzardCharacterArray.forEach(characterEntry -> {
+            JSONObject character = (JSONObject) characterEntry;
+            WoWCharacter wowCharacter = new WoWCharacter(region, character.getString("realm").toLowerCase(), character.getString("name"), character.has("guild") ? character.getString("guild") : null);
+            if (existingCharacters.contains(wowCharacter)) {
+                existingCharacters.remove(wowCharacter);
+            }
+            characterToUpdate.add(wowCharacter);
+        });
+
+        if (existingCharacters.size() > 0) {
+            //We remove old characters no longer existing.
+            Iterator<Object> characterIterator = discordCharacterArray.iterator();
+            while (characterIterator.hasNext()) {
+                JSONObject character = (JSONObject) characterIterator.next();
+                WoWCharacter arrayCharactor = new WoWCharacter(character.getString("region"),character.getString("realm"),character.getString("name"), character.has("guild") ? character.getString("guild") : null);
+                if (existingCharacters.contains(arrayCharactor)) {
+                    characterIterator.remove();
+                    existingCharacters.remove(arrayCharactor);
+                }
+            }
+        }
+
+        if (characterToUpdate.size() > 0) {
+            characterToUpdate.forEach(characterEntry -> {
+                JSONObject character = new JSONObject();
+                character.put("region", region);
+                character.put("realm", characterEntry.getRealm());
+                character.put("name", characterEntry.getName());
+                character.put("guild", characterEntry.getGuild());
+                discordCharacterArray.put(character);
+            });
+        }
+        discordUserJSON.put("characters", discordCharacterArray);
+        discordUser.setJson(discordUserJSON.toString());
+        DiscordUserBackend.saveDiscordUser(discordUser);
+        return discordUser;
     }
 }
