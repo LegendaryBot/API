@@ -22,10 +22,10 @@ provider:
   runtime: java8
   stage: ${env:TRAVIS_BRANCH}
   apiKeys:
-    - LegendaryBot-Production
+    - LegendaryBot-${self:provider.stage}
   environment:
-    DYNAMODB_TABLE_ITEM: LegendaryBot_item-${env:TRAVIS_BRANCH}
-    DYNAMODB_TABLE_DISCORD_USER: LegendaryBot_discordUser-${env:TRAVIS_BRANCH}
+    DYNAMODB_TABLE_ITEM: LegendaryBot_item-${self:provider.stage}
+    DYNAMODB_TABLE_DISCORD_USER: LegendaryBot_discordUser-${self:provider.stage}
     US_KEY: ${env:US_KEY}
     US_SECRET: ${env:US_SECRET}
     EU_KEY: ${env:EU_KEY}
