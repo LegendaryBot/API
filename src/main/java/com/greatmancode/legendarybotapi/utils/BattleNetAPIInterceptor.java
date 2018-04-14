@@ -108,7 +108,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         HttpUrl url = null;
-        if (chain.request().url().host().equals("us.api.battle.net") && chain.request().url().encodedPath().contains("/data/")) {
+        if (chain.request().url().host().equals("us.api.battle.net") && chain.request().url().encodedPath().startsWith("/data/")) {
             //Data mode US
             try {
                 refreshToken();
@@ -121,7 +121,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
                     .addQueryParameter("access_token", usToken.getAccessToken())
                     .build();
 
-        } else if (chain.request().url().host().equals("eu.api.battle.net") && chain.request().url().encodedPath().contains("/data/")) {
+        } else if (chain.request().url().host().equals("eu.api.battle.net") && chain.request().url().encodedPath().startsWith("/data/")) {
             //Data mode EU
             try {
                 refreshToken();

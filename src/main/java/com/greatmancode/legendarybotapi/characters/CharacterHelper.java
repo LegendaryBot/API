@@ -10,9 +10,11 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -45,9 +47,21 @@ public class CharacterHelper {
                     .addQueryParameter("fields", "gear,raid_progression,mythic_plus_scores,previous_mythic_plus_scores,mythic_plus_best_runs")
                     .build();
             Request request = new Request.Builder().url(url).build();
-            String result = client.newCall(request).execute().body().string();
+            String result = null;
+            try {
+                result = client.newCall(request).execute().body().string();
+            } catch (SocketTimeoutException e)  {
+
+            }
             if (result != null) {
-                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(result);
+                } catch (JSONException e) {
+                    jsonObject = new JSONObject();
+                    jsonObject.put("error","error");
+                }
+
                 if (!jsonObject.has("error")) {
 
                     EmbedBuilder eb = new EmbedBuilder();
@@ -243,17 +257,31 @@ public class CharacterHelper {
                     titleBuilder.append(" - ");
                     titleBuilder.append(region.toUpperCase());
                     titleBuilder.append(" | ");
-                    titleBuilder.append(HeroRace.values()[battleNetObject.getInt("race")]);
-                    titleBuilder.append(" ");
+                    url = new HttpUrl.Builder().scheme("https")
+                            .host(region + ".api.battle.net")
+                            .addPathSegments("wow/data/character/races")
+                            .build();
+                    battlenetRequest = new Request.Builder().url(url).build();
+                    String racesResult = clientBattleNet.newCall(battlenetRequest).execute().body().string();
+                    JSONObject raceObject = new JSONObject(racesResult);
+                    JSONArray raceArray = raceObject.getJSONArray("races");
+                    for (int i = 0; i < raceArray.length(); i++) {
+                        JSONObject raceEntry = raceArray.getJSONObject(i);
+                        if (raceEntry.getInt("id") == battleNetObject.getInt("race")) {
+                            titleBuilder.append(raceEntry.getString("name"));
+                            titleBuilder.append(" ");
+                        }
+                    }
+
                     titleBuilder.append(HeroClass.values()[battleNetObject.getInt("class")]);
                     titleBuilder.append(" ");
 
                     String wowLink = null;
 
                     if (region.equalsIgnoreCase("us")) {
-                        wowLink = "https://worldofwarcraft.com/en-us/character/" + serverSlug + "/" + jsonObject.get("name");
+                        wowLink = "https://worldofwarcraft.com/en-us/character/" + serverSlug + "/" + battleNetObject.get("name");
                     } else {
-                        wowLink = "https://worldofwarcraft.com/en-gb/character/" + serverSlug + "/" + jsonObject.get("name");
+                        wowLink = "https://worldofwarcraft.com/en-gb/character/" + serverSlug + "/" + battleNetObject.get("name");
                     }
 
                     EmbedBuilder eb = new EmbedBuilder();
