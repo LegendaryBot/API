@@ -1,9 +1,12 @@
 package com.greatmancode.legendarybotapi.discorduser;
 
+import com.greatmancode.legendarybotapi.utils.WoWCharacter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class DiscordUserHelper {
 
@@ -38,34 +41,26 @@ public class DiscordUserHelper {
 
     public static JSONArray getGuildCharactersForUser(DiscordUser user, String guildName) {
         JSONArray result = new JSONArray();
-        JSONObject userJSON = new JSONObject(user.getJson());
-        if (userJSON.has("characters")) {
-            userJSON.getJSONArray("characters").forEach(characterEntry -> {
-                JSONObject character = (JSONObject) characterEntry;
-                if (character.has("guild") && character.getString("guild").equalsIgnoreCase("guildName")) {
-                    result.put(character);
-                }
-            });
-        }
+        List<WoWCharacter> characterList = user.getCharacters();
+        characterList.forEach(characterEntry -> {
+            if (guildName.equalsIgnoreCase(characterEntry.getGuild())) {
+                result.put(characterEntry.getName());
+            }
+        });
         return result;
     }
 
     public static JSONObject getGuildMainCharacter(DiscordUser user, long id) {
         final JSONObject result = new JSONObject();
         if (user != null) {
-            JSONObject jsonObject = new JSONObject(user.getJson());
-            if (jsonObject.has("characters")) {
-                jsonObject.getJSONArray("characters").forEach(characterEntry -> {
-                    JSONObject character = (JSONObject) characterEntry;
-                    if (character.has("mainCharacterForGuild")) {
-                        if (character.getJSONArray("mainCharacterForGuild").toList().stream().filter(value -> ((Number)value).longValue() == id).count() == 1) {
-                            result.put("region", character.getString("region"));
-                            result.put("realm", character.getString("realm"));
-                            result.put("name", character.getString("name"));
-                        }
-                    }
-                });
-            }
+            List<WoWCharacter> characterList = user.getCharacters();
+            characterList.forEach(characterEntry -> {
+                if (characterEntry.getMainCharacterForGuild().contains(id)) {
+                    result.put("region", characterEntry.getRegion());
+                    result.put("realm", characterEntry.getRealm());
+                    result.put("name", characterEntry.getName());
+                }
+            });
 
         }
         return result;
@@ -74,45 +69,19 @@ public class DiscordUserHelper {
     public static boolean setGuildMainCharacter(DiscordUser user, long guildId, String region, String realm, String name) {
         boolean found = false;
         if (user != null) {
-            JSONObject jsonObject = new JSONObject(user.getJson());
-            if (jsonObject.has("characters")) {
-                JSONArray jsonArray = jsonObject.getJSONArray("characters");
-                int i;
-
-                for (i = 0; i < jsonArray.length(); i++) {
-                    JSONObject character = jsonArray.getJSONObject(i);
-                    if (character.getString("region").equalsIgnoreCase(region) && character.getString("realm").equalsIgnoreCase(realm) && character.getString("name").equalsIgnoreCase(name)) {
-                        found = true;
-                        break;
+            WoWCharacter characterToSet = new WoWCharacter(region, realm, name, null, new ArrayList<>());
+            List<WoWCharacter> userCharacters = user.getCharacters();
+            if (userCharacters.contains(characterToSet)) {
+                found = true;
+                //We check if any characters are already set as main.
+                userCharacters.forEach(characterEntry -> {
+                    if (characterEntry.getMainCharacterForGuild().contains(guildId)) {
+                        characterEntry.getMainCharacterForGuild().remove(guildId);
                     }
-                }
-                if (found) {
-                    //old character cleanup
-                    for (int ii = 0; ii < jsonArray.length(); ii++) {
-                        JSONObject character = jsonArray.getJSONObject(ii);
-                        if (character.has("mainCharacterForGuild")) {
-                            if (character.getJSONArray("mainCharacterForGuild").toList().stream().filter(value -> ((Number)value).longValue() == guildId).count() == 1) {
-                                Iterator<Object> iterator = character.getJSONArray("mainCharacterForGuild").iterator();
-                                while (iterator.hasNext()) {
-                                    long value = ((Number)iterator.next()).longValue();
-                                    if (value == guildId) {
-                                        iterator.remove();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    JSONObject character = jsonArray.getJSONObject(i);
-                    if (character.has("mainCharacterForGuild")) {
-                        character.getJSONArray("mainCharacterForGuild").put(guildId);
-                    } else {
-                        JSONArray tempArray = new JSONArray();
-                        tempArray.put(guildId);
-                        character.put("mainCharacterForGuild",tempArray);
-                    }
-                    user.setJson(jsonObject.toString());
-                    DiscordUserBackend.saveDiscordUser(user);
-                }
+                });
+                userCharacters.get(userCharacters.indexOf(characterToSet)).getMainCharacterForGuild().add(guildId);
+                user.updateCharacters(userCharacters);
+                DiscordUserBackend.saveDiscordUser(user);
             }
         }
         return found;

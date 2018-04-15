@@ -1,19 +1,22 @@
 package com.greatmancode.legendarybotapi.utils;
 
+import java.util.List;
 import java.util.Objects;
 
 public class WoWCharacter {
 
-    private final String region;
-    private final String realm;
-    private final String name;
-    private final String guild;
+    private String region;
+    private String realm;
+    private String name;
+    private String guild;
+    private List<Long> mainCharacterForGuild;
 
-    public WoWCharacter(String region, String realm, String name, String guild) {
+    public WoWCharacter(String region, String realm, String name, String guild, List<Long> mainCharacterForGuild) {
         this.region = region;
         this.realm = realm;
         this.name = name;
         this.guild = guild;
+        this.mainCharacterForGuild = mainCharacterForGuild;
     }
 
     public String getRegion() {
@@ -30,6 +33,26 @@ public class WoWCharacter {
 
     public String getGuild() {
         return guild;
+    }
+
+    public List<Long> getMainCharacterForGuild() {
+        return mainCharacterForGuild;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setRealm(String realm) {
+        this.realm = realm;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGuild(String guild) {
+        this.guild = guild;
     }
 
     @Override

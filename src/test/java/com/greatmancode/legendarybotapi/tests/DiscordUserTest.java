@@ -13,56 +13,6 @@ public class DiscordUserTest {
 
     @Test
     public void testDiscordUser() {
-        JSONObject object = new JSONObject();
-        JSONArray characters = new JSONArray();
-
-        JSONObject character = new JSONObject();
-        character.put("region", "us");
-        character.put("realm", "arthas");
-        character.put("name", "Kugruon");
-        JSONArray mainCharacterGuild = new JSONArray();
-        mainCharacterGuild.put(1234L);
-        mainCharacterGuild.put(4567L);
-        character.put("mainCharacterForGuild", mainCharacterGuild);
-        characters.put(character);
-
-        character = new JSONObject();
-        character.put("region", "eu");
-        character.put("realm", "moon-guard");
-        character.put("name", "Kogorof");
-        characters.put(character);
-        object.put("characters", characters);
-        DiscordUser discordUser = new DiscordUserImpl();
-        discordUser.setid(1111L);
-        discordUser.setJson(object.toString());
-
-        JSONObject mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, 1234L);
-        assertEquals(mainCharacter.length(), 3);
-        assertEquals(mainCharacter.getString("region"), "us");
-        assertEquals(mainCharacter.getString("realm"), "arthas");
-        assertEquals(mainCharacter.getString("name"), "Kugruon");
-
-        mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, 4567L);
-        assertEquals(mainCharacter.length(), 3);
-        assertEquals(mainCharacter.getString("region"), "us");
-        assertEquals(mainCharacter.getString("realm"), "arthas");
-        assertEquals(mainCharacter.getString("name"), "Kugruon");
-
-        mainCharacter = DiscordUserHelper.getGuildMainCharacter(discordUser, 3L);
-        assertEquals(mainCharacter.length(), 0);
-
-        DiscordUserHelper.setGuildMainCharacter(discordUser, 1234L, "eu","moon-guard", "Kogorof");
-        JSONObject resultSet = new JSONObject(discordUser.getJson());
-        JSONArray characterArray = resultSet.getJSONArray("characters");
-        JSONObject characterKugruon = characterArray.getJSONObject(0);
-        characterKugruon.getJSONArray("mainCharacterForGuild").forEach(value -> assertNotEquals(((Number)value).longValue(), 1234L));
-
-        JSONObject characterKogorof = characterArray.getJSONObject(1);
-        characterKogorof.getJSONArray("mainCharacterForGuild").forEach(value -> assertEquals(((Number)value).longValue(), 1234L));
-    }
-
-    @Test
-    public void testOAuth() {
         String resultingJson = "{\n" +
                 "    \"characters\": [\n" +
                 "        {\n" +
@@ -713,8 +663,42 @@ public class DiscordUserTest {
                 "        }\n" +
                 "    ]\n" +
                 "}";
-        DiscordUser user = OAuthHelper.handleCharacterUpdate("us",1234,resultingJson);
+        DiscordUser user = DiscordUserHelper.getDiscordUser(1234);
+        user.setJson(new JSONObject().toString());
+        user = OAuthHelper.handleCharacterUpdate("us", user, resultingJson);
         JSONObject userJSON = new JSONObject(user.getJson());
+        System.out.println(user.getJson());
         assertEquals(40,userJSON.getJSONArray("characters").length());
+        user = OAuthHelper.handleCharacterUpdate("us", user, resultingJson);
+        userJSON = new JSONObject(user.getJson());
+        assertEquals(40,userJSON.getJSONArray("characters").length());
+
+
+        JSONArray array = DiscordUserHelper.getGuildCharactersForUser(user, "Legendary");
+        assertEquals(5, array.length());
+        assertEquals(0, DiscordUserHelper.getGuildMainCharacter(user, 12345L).length());
+        assertTrue(DiscordUserHelper.setGuildMainCharacter(user, 12345L, "us", "arthas", "Kugruon"));
+        assertFalse(DiscordUserHelper.setGuildMainCharacter(user, 12345L, "us", "arthas", "Kugruonnn"));
+        assertEquals(3, DiscordUserHelper.getGuildMainCharacter(user, 12345L).length());
+        resultingJson = "{\n" +
+                "    \"characters\": [\n" +
+                "        {\n" +
+                "            \"name\": \"Huulurrah\",\n" +
+                "            \"realm\": \"Arthas\",\n" +
+                "            \"battlegroup\": \"Ruin\",\n" +
+                "            \"class\": 11,\n" +
+                "            \"race\": 6,\n" +
+                "            \"gender\": 0,\n" +
+                "            \"level\": 0,\n" +
+                "            \"achievementPoints\": 0,\n" +
+                "            \"thumbnail\": \"arthas/149/191471509-avatar.jpg\",\n" +
+                "            \"lastModified\": 0\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+        user = OAuthHelper.handleCharacterUpdate("us", user, resultingJson);
+        userJSON = new JSONObject(user.getJson());
+        assertEquals(1,userJSON.getJSONArray("characters").length());
+
     }
 }
