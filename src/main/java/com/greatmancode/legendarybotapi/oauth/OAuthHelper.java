@@ -117,7 +117,9 @@ public class OAuthHelper {
         }
 
         if (characterToUpdate.size() > 0) {
-            discordCharacterArray.toList().clear();
+            for (int i = 0; i < discordCharacterArray.length(); i++) {
+                discordCharacterArray.remove(i);
+            }
             characterToUpdate.forEach(characterEntry -> {
                 JSONObject character = new JSONObject();
                 character.put("region", region);
