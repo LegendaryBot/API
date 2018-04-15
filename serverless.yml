@@ -117,21 +117,21 @@ functions:
     timeout: 15
     events:
       - http:
-          path: /discorduser/{userId}/character/{guildId}
+          path: /user/{userId}/character/{guildId}
           method: get
   get-discord-user-all-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetGuildCharactersForUser
     timeout: 15
     events:
       - http:
-          path: /discorduser/{userId}/character/{guildId}/all
+          path: /user/{userId}/character/all/{guildName}
           method: get
   set-discord-user-main-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordUserMainCharacter
     timeout: 15
     events:
       - http:
-          path: /discorduser/{userId}/character/{guildId}/{region}/{realm}/{character}
+          path: /user/{userId}/character/{guildId}/{region}/{realm}/{character}
           method: post
           private: true
   get-auth-battlenet:
