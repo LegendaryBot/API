@@ -227,7 +227,7 @@ resources:
       Properties:
         Subscription:
           - Endpoint: ${self:custom.pubsub.url}
-            Protocol: http
+            Protocol: https
 
 custom:
   domains:
