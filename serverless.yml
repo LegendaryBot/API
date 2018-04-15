@@ -222,6 +222,13 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
+    PubSub:
+      Type: AWS::SNS::Topic
+      Properties:
+        Subscription:
+          - Endpoint: ${self:custom.pubsub.url}
+            Protocol: http
+
 custom:
   domains:
     prod: api.legendarybot.info
@@ -231,4 +238,6 @@ custom:
     basePath: api
     createRoute53Record: false
     endpointType: 'edge'
+  pubsub:
+    url: "https://api-dev.legendarybot.info" #tempvalue
 
