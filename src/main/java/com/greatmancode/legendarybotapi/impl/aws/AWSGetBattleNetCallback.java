@@ -17,6 +17,7 @@ public class AWSGetBattleNetCallback implements RequestHandler<Map<String, Objec
         OAuthHelper.handleBattleNetCallback(code,state);
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)
+                .setObjectBody("LegendaryBot is now synced with your characters. You can close the window.")
                 .build();
     }
 }
