@@ -84,7 +84,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
             if (System.getenv("EU_SECRET") != null)
                 euSecret = System.getenv("EU_SECRET");
             else if (System.getenv("EU_SECRET_master") != null)
-                euSecret = System.getenv("EU_KEY_master");
+                euSecret = System.getenv("EU_SECRET_master");
             else if (System.getenv("EU_SECRET_prod") != null)
                 euSecret = System.getenv("EU_SECRET_prod");
 
