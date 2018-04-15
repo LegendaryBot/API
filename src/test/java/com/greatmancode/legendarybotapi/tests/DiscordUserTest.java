@@ -715,6 +715,6 @@ public class DiscordUserTest {
                 "}";
         DiscordUser user = OAuthHelper.handleCharacterUpdate("us",1234,resultingJson);
         JSONObject userJSON = new JSONObject(user.getJson());
-        assertNotSame(userJSON.getJSONArray("characters").length(), 0);
+        assertEquals(40,userJSON.getJSONArray("characters").length());
     }
 }

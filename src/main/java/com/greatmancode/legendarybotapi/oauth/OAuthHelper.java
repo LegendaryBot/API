@@ -85,13 +85,11 @@ public class OAuthHelper {
 
 
         List<WoWCharacter> existingCharacters = new ArrayList<>();
-        if (discordUserJSON.length() > 0) {
-            if (discordUserJSON.has("characters")) {
-                discordUserJSON.getJSONArray("characters").forEach(characterEntry -> {
-                    JSONObject character = (JSONObject) characterEntry;
-                    existingCharacters.add(new WoWCharacter(character.getString("region"),character.getString("realm"),character.getString("name"), character.has("guild") ? character.getString("guild") : null));
-                });
-            }
+        if (discordUserJSON.length() > 0 && discordUserJSON.has("characters")) {
+            discordUserJSON.getJSONArray("characters").forEach(characterEntry -> {
+                JSONObject character = (JSONObject) characterEntry;
+                existingCharacters.add(new WoWCharacter(character.getString("region"),character.getString("realm"),character.getString("name"), character.has("guild") ? character.getString("guild") : null));
+            });
         }
 
         //We now add/remove accordingly
@@ -119,6 +117,7 @@ public class OAuthHelper {
         }
 
         if (characterToUpdate.size() > 0) {
+            discordCharacterArray.toList().clear();
             characterToUpdate.forEach(characterEntry -> {
                 JSONObject character = new JSONObject();
                 character.put("region", region);
