@@ -667,7 +667,7 @@ public class DiscordUserTest {
         user.setJson(new JSONObject().toString());
         user = OAuthHelper.handleCharacterUpdate("us", user, resultingJson);
         JSONObject userJSON = new JSONObject(user.getJson());
-        System.out.println(user.getJson());
+
         assertEquals(40,userJSON.getJSONArray("characters").length());
         user = OAuthHelper.handleCharacterUpdate("us", user, resultingJson);
         userJSON = new JSONObject(user.getJson());

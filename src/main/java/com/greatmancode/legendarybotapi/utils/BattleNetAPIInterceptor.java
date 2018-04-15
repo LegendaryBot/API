@@ -57,10 +57,36 @@ public class BattleNetAPIInterceptor implements Interceptor {
      */
     public BattleNetAPIInterceptor() {
         try {
-            usKey = System.getenv("US_KEY");
-            String usSecret = System.getenv("US_SECRET");
-            euKey = System.getenv("EU_KEY");
-            String euSecret = System.getenv("EU_SECRET");
+            if (System.getenv("US_KEY") != null)
+                usKey = System.getenv("US_KEY");
+            else if (System.getenv("US_KEY_master") != null)
+                usKey = System.getenv("US_KEY_master");
+            else if (System.getenv("US_KEY_prod") != null)
+                usKey = System.getenv("US_KEY_prod");
+
+            String usSecret = null;
+            if (System.getenv("US_SECRET") != null)
+                usSecret = System.getenv("US_SECRET");
+            else if (System.getenv("US_SECRET_master") != null)
+                usSecret = System.getenv("US_SECRET_master");
+            else if (System.getenv("US_SECRET_prod") != null)
+                usSecret = System.getenv("US_SECRET_prod");
+
+            if (System.getenv("EU_KEY") != null)
+                euKey = System.getenv("EU_KEY");
+            else if (System.getenv("EU_KEY_master") != null)
+                euKey = System.getenv("EU_KEY_master");
+            else if (System.getenv("EU_KEY_prod") != null)
+                euKey = System.getenv("EU_KEY_prod");
+
+
+            String euSecret = null;
+            if (System.getenv("EU_SECRET") != null)
+                euSecret = System.getenv("EU_SECRET");
+            else if (System.getenv("EU_SECRET_master") != null)
+                euSecret = System.getenv("EU_KEY_master");
+            else if (System.getenv("EU_SECRET_prod") != null)
+                euSecret = System.getenv("EU_SECRET_prod");
 
             if (usKey == null && euKey == null) {
                 throw new IllegalArgumentException("Blizzard API requires at least one API key.");
