@@ -4,6 +4,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.greatmancode.legendarybotapi.discordguild.DiscordGuild;
+import com.greatmancode.legendarybotapi.discordguild.DiscordGuildImpl;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserImpl;
 import com.greatmancode.legendarybotapi.item.Item;
@@ -48,5 +50,22 @@ public class DynamoDBHelper {
     public static void saveDiscordUser(DiscordUser discordUser) {
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_USER"));
         table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", discordUser.getid()).withJSON("json", discordUser.getJson()));
+    }
+
+    public static DiscordGuild getDiscordGuild(long id) {
+        DiscordGuild guild = null;
+        Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_GUILD"));
+        com.amazonaws.services.dynamodbv2.document.Item entry = table.getItem("id", id);
+        if (entry != null) {
+            guild = new DiscordGuildImpl();
+            guild.setid(id);
+            guild.setJson(entry.getJSON("json"));
+        }
+        return guild;
+    }
+
+    public static void saveDiscordGuild(DiscordGuild discordGuild) {
+        Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_GUILD"));
+        table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", discordGuild.getid()).withJSON("json", discordGuild.getJson()));
     }
 }

@@ -86,4 +86,23 @@ public class DiscordUserHelper {
         }
         return found;
     }
+
+    /*
+        {
+            "users": [
+                {
+                    "discordId": 124623856285
+                    "ranks": [
+                        "Raider",
+                        "Member",
+                        "Admin",
+                    ]
+                }
+            ]
+        }
+
+     */
+    public static JSONObject processRankUpdate(long guildId, String json) {
+        return new JSONObject();
+    }
 }

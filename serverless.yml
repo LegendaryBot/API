@@ -27,6 +27,7 @@ provider:
     API_URL: ${self:custom.customDomain.domainName}
     DYNAMODB_TABLE_ITEM: LegendaryBot_item-${self:provider.stage}
     DYNAMODB_TABLE_DISCORD_USER: LegendaryBot_discordUser-${self:provider.stage}
+    DYNAMODB_TBALE_DISCORD_GUILD: LegendaryBot_discordGuild-${self:provider.stage}
     US_KEY: ${env:US_KEY_${self:provider.stage}}
     US_SECRET: ${env:US_SECRET_${self:provider.stage}}
     EU_KEY: ${env:EU_KEY_${self:provider.stage}}
@@ -52,6 +53,15 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_DISCORD_USER}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_DISCORD_GUILD}"
 
 plugins:
   - serverless-domain-manager
@@ -148,6 +158,22 @@ functions:
       - http:
           path: /oauth/battlenetcallback
           method: get
+  get-guild-setting:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordGuildSetting
+    timeout: 15
+    events:
+      - http:
+          path: /guild/{guildId}/setting/{key}
+          method: get
+          private: true
+  set-guild-setting:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordGuildSetting
+    timeout: 15
+    events:
+      - http:
+          path: /guild/{guildId}/setting/{key}
+          method: post
+          private: true
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -222,6 +248,19 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
+    DynamoDbTableGuild:
+          Type: AWS::DynamoDB::Table
+          Properties:
+            TableName: ${self:provider.environment.DYNAMODB_TABLE_DISCORD_GUILD}
+            AttributeDefinitions:
+              - AttributeName: id
+                AttributeType: N
+            KeySchema:
+              - AttributeName: id
+                KeyType: HASH
+            ProvisionedThroughput:
+              ReadCapacityUnits: 2
+              WriteCapacityUnits: 2
     PubSub:
       Type: AWS::SNS::Topic
       Properties:
