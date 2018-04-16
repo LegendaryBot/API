@@ -29,9 +29,18 @@ public class DiscordGuildHelper {
     public static Object getSetting(DiscordGuild guild, String key) {
         Object value = null;
         JSONObject guildJSON = new JSONObject(guild.getJson());
-        if (guildJSON.has("settings")) {
+        if (guildJSON.has("settings") && guildJSON.getJSONObject("settings").has(key)) {
             value = guildJSON.getJSONObject("settings").get(key);
         }
         return value;
+    }
+
+    public static void unsetSetting(DiscordGuild guild, String key) {
+        JSONObject guildJSON = new JSONObject(guild.getJson());
+        if (guildJSON.has("settings") && guildJSON.getJSONObject("settings").has(key)) {
+            guildJSON.getJSONObject("settings").remove(key);
+        }
+        guild.setJson(guildJSON.toString());
+        DiscordGuildBackend.saveDiscordGuild(guild);
     }
 }

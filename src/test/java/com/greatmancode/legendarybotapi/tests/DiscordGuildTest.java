@@ -24,7 +24,8 @@ public class DiscordGuildTest {
         DiscordGuildHelper.setSetting(guild, "testjson", jsonObject);
         assertEquals("teststring", DiscordGuildHelper.getSetting(guild, "testsetting"));
         assertTrue(jsonObject.similar(DiscordGuildHelper.getSetting(guild, "testjson")));
-        System.out.println(guild);
+        DiscordGuildHelper.unsetSetting(guild, "testjson");
+        assertNull(DiscordGuildHelper.getSetting(guild, "testjson"));
 
     }
 }
