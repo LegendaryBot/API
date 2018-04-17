@@ -26,11 +26,11 @@ public class DiscordGuildHelper {
         DiscordGuildBackend.saveDiscordGuild(guild);
     }
 
-    public static Object getSetting(DiscordGuild guild, String key) {
-        Object value = null;
+    public static <T extends Object> T getSetting(DiscordGuild guild, String key) {
+        T value = null;
         JSONObject guildJSON = new JSONObject(guild.getJson());
         if (guildJSON.has("settings") && guildJSON.getJSONObject("settings").has(key)) {
-            value = guildJSON.getJSONObject("settings").get(key);
+            value = (T) guildJSON.getJSONObject("settings").get(key);
         }
         return value;
     }
