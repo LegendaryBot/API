@@ -173,16 +173,13 @@ public class DiscordGuildHelper {
                     //If we have the rank in our mapping, add it to the possible to add
                     if (discordRankMapping.containsKey(rankID)) {
                         discordRank = discordRankMapping.get(rankID);
-                        //Does the discord rank exist?
-                        if (guildRanks.containsKey(discordRank)) {
-                            //Does the user not have the rank?
-                            if (!user.getJSONArray("ranks").toList().contains(discordRank)) {
-                                //The user does not have the rank, let's add it to him.
-                                JSONObject discordRankJSON = guildRanks.get(discordRank);
-                                if (botRoleRank[0] > discordRankJSON.getInt("position")) {
-                                    //the bot rank is higher than the given rank, so we can set it.
-                                    userJSON.put("rankToAdd", discordRank);
-                                }
+                        //Does the discord rank exist and Does the user not have the rank??
+                        if (guildRanks.containsKey(discordRank) && !user.getJSONArray("ranks").toList().contains(discordRank)) {
+                            //The user does not have the rank, let's add it to him.
+                            JSONObject discordRankJSON = guildRanks.get(discordRank);
+                            if (botRoleRank[0] > discordRankJSON.getInt("position")) {
+                                //the bot rank is higher than the given rank, so we can set it.
+                                userJSON.put("rankToAdd", discordRank);
                             }
                         }
                     }

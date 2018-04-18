@@ -223,7 +223,7 @@ public class DiscordGuildTest {
                 tested6.set(true);
                 assertEquals(2, roleChange.getJSONArray("ranksToRemove").length());
                 roleChange.getJSONArray("ranksToRemove").forEach(entry -> {
-                    assertTrue(entry.equals("Raider") || entry.equals("Member"));
+                    assertTrue("Raider".equalsIgnoreCase((String) entry) || "Member".equalsIgnoreCase((String) entry));
                 });
             } else if (discordId == 7) {
                 tested7.set(true);

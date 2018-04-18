@@ -1,26 +1,13 @@
 package com.greatmancode.legendarybotapi.tests;
 
-import com.greatmancode.legendarybotapi.discordguild.DiscordGuild;
-import com.greatmancode.legendarybotapi.discordguild.DiscordGuildHelper;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
-import com.greatmancode.legendarybotapi.discorduser.DiscordUserBackend;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserHelper;
 import com.greatmancode.legendarybotapi.oauth.OAuthHelper;
-import com.greatmancode.legendarybotapi.utils.WoWCharacter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 public class DiscordUserTest {
 

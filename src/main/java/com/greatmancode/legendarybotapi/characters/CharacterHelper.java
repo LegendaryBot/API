@@ -2,7 +2,6 @@ package com.greatmancode.legendarybotapi.characters;
 
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import com.greatmancode.legendarybotapi.utils.HeroClass;
-import com.greatmancode.legendarybotapi.utils.HeroRace;
 import com.greatmancode.legendarybotapi.utils.WoWUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import okhttp3.ConnectionPool;
