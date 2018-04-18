@@ -6,6 +6,8 @@ after_success:
   - npm install serverless-domain-manager --save-dev
   - serverless create_domain
   - serverless deploy --conceal
+  - wget https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/4.0.0/codacy-coverage-reporter-4.0.0-assembly.jar
+  - java -jar codacy-coverage-reporter-4.0.0-assembly.jar report -l Java -r target\site\jacoco\jacoco.xml
 branches:
   only:
     - master
