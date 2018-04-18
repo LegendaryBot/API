@@ -15,7 +15,8 @@ public class AWSGetGuildCharactersForUser implements RequestHandler<Map<String, 
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
         long userId = Long.parseLong(pathParameters.get("userId"));
         String guildName = pathParameters.get("guildName");
-        JSONArray characters = DiscordUserHelper.getGuildCharactersForUser(DiscordUserHelper.getDiscordUser(userId), guildName);
+        DiscordUserHelper userHelper = new DiscordUserHelper();
+        JSONArray characters = userHelper.getGuildCharactersForUser(userHelper.getDiscordUser(userId), guildName);
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)
                 .setRawBody(characters.toString())

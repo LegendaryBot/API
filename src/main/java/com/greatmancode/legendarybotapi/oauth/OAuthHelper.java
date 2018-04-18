@@ -62,7 +62,8 @@ public class OAuthHelper {
             OAuthRequest request = new OAuthRequest(Verb.GET, "https://"+region+".api.battle.net/wow/user/characters");
             service.signRequest(token, request);
             Response response = service.execute(request);
-            handleCharacterUpdate(region, DiscordUserHelper.getDiscordUser(userId), response.getBody());
+            DiscordUserHelper userHelper = new DiscordUserHelper();
+            handleCharacterUpdate(region, userHelper.getDiscordUser(userId), response.getBody());
 
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();

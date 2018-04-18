@@ -13,7 +13,8 @@ public class AWSSetDiscordGuildSetting implements RequestHandler<Map<String, Obj
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
         long guildId = Long.parseLong(pathParameters.get("guildId"));
         String key = pathParameters.get("key");
-        DiscordGuildHelper.setSetting(DiscordGuildHelper.getDiscordGuild(guildId),key, input.get("body"));
+        DiscordGuildHelper guildHelper = new DiscordGuildHelper();
+        guildHelper.setSetting(guildHelper.getDiscordGuild(guildId),key, input.get("body"));
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)
                 .build();

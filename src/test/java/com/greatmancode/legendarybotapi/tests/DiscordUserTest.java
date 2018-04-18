@@ -1,14 +1,27 @@
 package com.greatmancode.legendarybotapi.tests;
 
+import com.greatmancode.legendarybotapi.discordguild.DiscordGuild;
+import com.greatmancode.legendarybotapi.discordguild.DiscordGuildHelper;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
+import com.greatmancode.legendarybotapi.discorduser.DiscordUserBackend;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserHelper;
-import com.greatmancode.legendarybotapi.discorduser.DiscordUserImpl;
 import com.greatmancode.legendarybotapi.oauth.OAuthHelper;
+import com.greatmancode.legendarybotapi.utils.WoWCharacter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 public class DiscordUserTest {
 
     @Test
@@ -663,7 +676,8 @@ public class DiscordUserTest {
                 "        }\n" +
                 "    ]\n" +
                 "}";
-        DiscordUser user = DiscordUserHelper.getDiscordUser(1234);
+        DiscordUserHelper userHelper = new DiscordUserHelper();
+        DiscordUser user = userHelper.getDiscordUser(1234);
         user.setJson(new JSONObject().toString());
         user = OAuthHelper.handleCharacterUpdate("us", user, resultingJson);
         JSONObject userJSON = new JSONObject(user.getJson());
@@ -674,12 +688,12 @@ public class DiscordUserTest {
         assertEquals(40,userJSON.getJSONArray("characters").length());
 
 
-        JSONArray array = DiscordUserHelper.getGuildCharactersForUser(user, "Legendary");
+        JSONArray array = userHelper.getGuildCharactersForUser(user, "Legendary");
         assertEquals(5, array.length());
-        assertEquals(0, DiscordUserHelper.getGuildMainCharacter(user, 12345L).length());
-        assertTrue(DiscordUserHelper.setGuildMainCharacter(user, 12345L, "us", "arthas", "Kugruon"));
-        assertFalse(DiscordUserHelper.setGuildMainCharacter(user, 12345L, "us", "arthas", "Kugruonnn"));
-        assertEquals(3, DiscordUserHelper.getGuildMainCharacter(user, 12345L).length());
+        assertEquals(0, userHelper.getGuildMainCharacter(user, 12345L).length());
+        assertTrue(userHelper.setGuildMainCharacter(user, 12345L, "us", "arthas", "Kugruon"));
+        assertFalse(userHelper.setGuildMainCharacter(user, 12345L, "us", "arthas", "Kugruonnn"));
+        assertEquals(3, userHelper.getGuildMainCharacter(user, 12345L).length());
         resultingJson = "{\n" +
                 "    \"characters\": [\n" +
                 "        {\n" +

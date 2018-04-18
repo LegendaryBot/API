@@ -182,6 +182,14 @@ functions:
           path: /guild/{guildId}/setting/{key}
           method: delete
           private: true
+  get-guild-rank-update:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordGuildRankUpdate
+    timeout: 15
+    events:
+      - http:
+          path: /guild/{guildId}/rankUpdate
+          method: post
+          private: true
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

@@ -14,7 +14,8 @@ public class AWSGetDiscordGuildSetting implements RequestHandler<Map<String, Obj
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
         long guildId = Long.parseLong(pathParameters.get("guildId"));
         String key = pathParameters.get("key");
-        Object value = DiscordGuildHelper.getSetting(DiscordGuildHelper.getDiscordGuild(guildId),key);
+        DiscordGuildHelper guildHelper = new DiscordGuildHelper();
+        Object value = guildHelper.getSetting(guildHelper.getDiscordGuild(guildId),key);
 
         if (value == null) {
             return ApiGatewayResponse.builder()

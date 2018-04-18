@@ -20,7 +20,8 @@ public class AWSSetDiscordUserMainCharacter implements RequestHandler<Map<String
         String realm = pathParameters.get("realm");
         try {
             String character = character = URLDecoder.decode(pathParameters.get("character"), "UTF-8");
-            boolean result = DiscordUserHelper.setGuildMainCharacter(DiscordUserHelper.getDiscordUser(userId), guildId,region,realm,character);
+            DiscordUserHelper userHelper = new DiscordUserHelper();
+            boolean result = userHelper.setGuildMainCharacter(userHelper.getDiscordUser(userId), guildId,region,realm,character);
             return ApiGatewayResponse.builder()
                     .setStatusCode(result ? 200 : 404)
                     .build();
