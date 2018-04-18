@@ -157,6 +157,7 @@
             <configuration>
                 <excludes>
                     <exclude>/com/greatmancode/legendarybotapi/impl/**/*</exclude>
+                    <exclude>/com/serverless/**/*</exclude>
                 </excludes>
             </configuration>
             <executions>
