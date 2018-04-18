@@ -154,6 +154,11 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.1</version>
+            <configuration>
+                <excludes>
+                    <exclude>/com/greatmancode/legendarybotapi/impl/**/*</exclude>
+                </excludes>
+            </configuration>
             <executions>
                 <execution>
                     <id>prepare-agent</id>
