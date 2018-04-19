@@ -242,7 +242,7 @@ public class DiscordGuildHelper {
                 if (!battleNetJSON.has("status")) {
                     battleNetJSON.getJSONArray("members").forEach(memberEntry -> {
                         JSONObject member = (JSONObject) memberEntry;
-                        guildMembers.put(member.getJSONObject("character").getString("name"), member.getJSONObject("character").getInt("rank"));
+                        guildMembers.put(member.getJSONObject("character").getString("name"), member.getInt("rank"));
                     });
                 }
             } catch (IOException e) {
