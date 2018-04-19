@@ -47,6 +47,7 @@ public class DiscordGuildHelper {
     public <T extends Object> T getSetting(DiscordGuild guild, String key) {
         T value = null;
         JSONObject guildJSON = new JSONObject(guild.getJson());
+        System.out.println(guildJSON);
         if (guildJSON.has("settings") && guildJSON.getJSONObject("settings").has(key)) {
             value = (T) guildJSON.getJSONObject("settings").get(key);
         }
@@ -136,7 +137,7 @@ public class DiscordGuildHelper {
         });
 
         //We retrieve the ranks in the configuration
-        JSONObject discordGuildJSON = getSetting(discordGuild, "wowranks");
+        JSONObject discordGuildJSON = new JSONObject((String)getSetting(discordGuild, "wowranks"));
         Map<Integer,String> discordRankMapping = new HashMap<>();
         for (int i = 0; i < 10; i++) {
             if (discordGuildJSON.has(i + "")) {
