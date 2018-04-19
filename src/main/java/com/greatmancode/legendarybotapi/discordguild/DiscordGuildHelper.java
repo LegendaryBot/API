@@ -58,7 +58,6 @@ public class DiscordGuildHelper {
     public <T extends Object> T getSetting(DiscordGuild guild, String key) {
         T value = null;
         JSONObject guildJSON = new JSONObject(guild.getJson());
-        System.out.println(guildJSON);
         if (guildJSON.has("settings") && guildJSON.getJSONObject("settings").has(key)) {
             value = (T) guildJSON.getJSONObject("settings").get(key);
         }
@@ -243,7 +242,7 @@ public class DiscordGuildHelper {
                 if (!battleNetJSON.has("status")) {
                     battleNetJSON.getJSONArray("members").forEach(memberEntry -> {
                         JSONObject member = (JSONObject) memberEntry;
-                        guildMembers.put(member.getJSONObject("characters").getString("name"), member.getJSONObject("characters").getInt("rank"));
+                        guildMembers.put(member.getJSONObject("character").getString("name"), member.getJSONObject("character").getInt("rank"));
                     });
                 }
             } catch (IOException e) {
