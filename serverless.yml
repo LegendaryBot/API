@@ -153,7 +153,7 @@ functions:
           method: get
   get-auth-battlenetcallback:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetBattleNetCallback
-    timeout: 15
+    timeout: 60
     events:
       - http:
           path: /oauth/battlenetcallback
