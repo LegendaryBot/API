@@ -137,7 +137,7 @@ public class DiscordGuildHelper {
         });
 
         //We retrieve the ranks in the configuration
-        JSONObject discordGuildJSON = new JSONObject((String)getSetting(discordGuild, "wowranks"));
+        JSONObject discordGuildJSON = getSetting(discordGuild, "wowranks");
         Map<Integer,String> discordRankMapping = new HashMap<>();
         for (int i = 0; i < 10; i++) {
             if (discordGuildJSON.has(i + "")) {
