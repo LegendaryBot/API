@@ -14,6 +14,7 @@ public class AWSSetDiscordGuildSetting implements RequestHandler<Map<String, Obj
         long guildId = Long.parseLong(pathParameters.get("guildId"));
         String key = pathParameters.get("key");
         DiscordGuildHelper guildHelper = new DiscordGuildHelper();
+        System.out.println("THE BODY:" + input.get("body"));
         guildHelper.setSetting(guildHelper.getDiscordGuild(guildId),key, input.get("body"));
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)
