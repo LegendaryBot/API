@@ -9,6 +9,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -39,8 +40,17 @@ public class DiscordGuildHelper {
         if (!guildJSON.has("settings")) {
             guildJSON.put("settings", new JSONObject());
         }
-        guildJSON.getJSONObject("settings").put(key,value);
-        System.out.println("the value: " + value);
+        //We check if it can be jsonified. Do so if we can
+        if (value instanceof String) {
+            try {
+                JSONObject jsonValue = new JSONObject((String)value);
+                guildJSON.getJSONObject("settings").put(key,jsonValue);
+            } catch (JSONException e) {
+                guildJSON.getJSONObject("settings").put(key,value);
+            }
+        } else {
+            guildJSON.getJSONObject("settings").put(key,value);
+        }
         guild.setJson(guildJSON.toString());
         DiscordGuildBackend.saveDiscordGuild(guild);
     }
