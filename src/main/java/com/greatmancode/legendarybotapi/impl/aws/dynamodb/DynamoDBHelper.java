@@ -66,6 +66,7 @@ public class DynamoDBHelper {
 
     public static void saveDiscordGuild(DiscordGuild discordGuild) {
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_DISCORD_GUILD"));
+        System.out.println("The json before save:" + discordGuild.getJson());
         table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", discordGuild.getid()).withJSON("json", discordGuild.getJson()));
     }
 }

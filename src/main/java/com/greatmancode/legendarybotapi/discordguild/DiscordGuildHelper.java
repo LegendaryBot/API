@@ -40,6 +40,7 @@ public class DiscordGuildHelper {
             guildJSON.put("settings", new JSONObject());
         }
         guildJSON.getJSONObject("settings").put(key,value);
+        System.out.println("the value: " + value);
         guild.setJson(guildJSON.toString());
         DiscordGuildBackend.saveDiscordGuild(guild);
     }
