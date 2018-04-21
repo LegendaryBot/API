@@ -4,6 +4,8 @@ import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserHelper;
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import com.greatmancode.legendarybotapi.utils.WoWCharacter;
+import com.greatmancode.legendarybotapi.wow.WoWGuildUtils;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -247,5 +249,12 @@ public class DiscordGuildHelper {
             }
         }
         return (guildMembers.size() != 0) ? guildMembers : null;
+    }
+
+    public MessageEmbed getLatestGuildLogs(DiscordGuild discordGuild) {
+        String serverName = getSetting(discordGuild, "WOW_SERVER_NAME");
+        String region = getSetting(discordGuild, "WOW_REGION_NAME");
+        String guildName = getSetting(discordGuild, "GUILD_NAME");
+        return WoWGuildUtils.getLastestWarcraftLog(region, serverName, guildName);
     }
 }

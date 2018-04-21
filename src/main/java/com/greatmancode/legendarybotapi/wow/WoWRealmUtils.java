@@ -1,4 +1,4 @@
-package com.greatmancode.legendarybotapi.wowrealm;
+package com.greatmancode.legendarybotapi.wow;
 
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import net.dv8tion.jda.core.EmbedBuilder;

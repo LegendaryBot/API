@@ -1,6 +1,6 @@
 package com.greatmancode.legendarybotapi.tests;
 
-import com.greatmancode.legendarybotapi.wowrealm.WoWRealmUtils;
+import com.greatmancode.legendarybotapi.wow.WoWRealmUtils;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.junit.jupiter.api.Test;
 

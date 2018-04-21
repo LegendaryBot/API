@@ -1,9 +1,19 @@
 package com.greatmancode.legendarybotapi.utils;
 
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.awt.*;
+import java.io.IOException;
 
 public class WoWUtils {
 
+    private static final OkHttpClient clientBattleNet = new OkHttpClient.Builder()
+            .addInterceptor(new BattleNetAPIInterceptor())
+            .build();
     /**
      * Retrieve the {@link Color} of a World of Warcraft class.
      * @param className The class name to get the color from
@@ -100,5 +110,25 @@ public class WoWUtils {
                 break;
         }
         return url;
+    }
+
+    public static String getRealmTimezone(String region, String realm) {
+        HttpUrl url = new HttpUrl.Builder().scheme("https")
+                .host(region + ".api.battle.net")
+                .addPathSegments("/wow/realm/status")
+                .addQueryParameter("realms", realm)
+                .build();
+        Request request = new Request.Builder().url(url).build();
+        try {
+            JSONObject jsonObject = new JSONObject(clientBattleNet.newCall(request).execute().body().string());
+            if (jsonObject.has("code")) {
+                return null;
+            }
+            JSONArray realmArray = jsonObject.getJSONArray("realms");
+            return realmArray.getJSONObject(0).getString("timezone");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

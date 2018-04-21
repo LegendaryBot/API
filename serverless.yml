@@ -34,6 +34,7 @@ provider:
     EU_SECRET: ${env:EU_SECRET_${self:provider.stage}}
     TWITTER_KEY: ${env:TWITTER_KEY}
     TWITTER_SECRET: ${env:TWITTER_SECRET}
+    WARCRAFTLOGS_KEY: ${env:WARCRAFTLOGS_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -197,7 +198,13 @@ functions:
       - http:
           path: /server/{region}/{realm}/status
           method: get
-
+  get-guild-latest-log:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetGuildLatestLog
+    timeout: 15
+    events:
+      - http:
+          path: /guild/{guildId}/getLatestLog
+          method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
