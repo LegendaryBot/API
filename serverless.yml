@@ -176,7 +176,7 @@ functions:
           method: post
           private: true
   set-guild-setting-raw:
-    handler: com.greatmancode.legendarybot.api.impl.aws.AWSSetDiscordGuildSettingRaw
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordGuildSettingRaw
     timeout: 15
     events:
       - http:
