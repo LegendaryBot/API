@@ -45,7 +45,7 @@ public class WoWGuildUtils {
             calendar.setTimeInMillis(jsonObject.getLong("start"));
             eb.setTitle(jsonObject.getString("title"), "https://www.warcraftlogs.com/reports/" + jsonObject.getString("id"));
             eb.setTimestamp(calendar.toInstant());
-            eb.setThumbnail("https://www.warcraftlogs.com/img/icons/warcraft/zone-" + jsonObject.getInt("zone") + ".jpg");
+            eb.setThumbnail("https://www.warcraftlogs.com/img/icons/warcraft/zone-" + jsonObject.getInt("zone") + "-small.jpg");
             eb.addField("Created by", jsonObject.getString("owner"), true);
 
             url = new HttpUrl.Builder().scheme("https")
