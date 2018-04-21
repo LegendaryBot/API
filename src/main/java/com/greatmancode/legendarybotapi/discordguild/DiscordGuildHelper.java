@@ -4,7 +4,6 @@ import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserHelper;
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import com.greatmancode.legendarybotapi.utils.WoWCharacter;
-import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,13 +14,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class DiscordGuildHelper {
 
     private final OkHttpClient clientBattleNet = new OkHttpClient.Builder()
             .addInterceptor(new BattleNetAPIInterceptor())
-            .connectionPool(new ConnectionPool(300, 1, TimeUnit.SECONDS))
             .build();
 
     public DiscordGuild getDiscordGuild(long guildId) {
