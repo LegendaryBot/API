@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,18 +44,25 @@ public class LegionBuildingHelper {
             builder.addField("Nether Disruptor", buildingStatusString.get(2) + " " + buildingStatus.get(2), false);
             if (buildingStatusString.get(0).equalsIgnoreCase("Completed")) {
                 builder.setImage(buildingImage.get(0));
+                builder.setColor(Color.GREEN);
             } else if (buildingStatusString.get(1).equalsIgnoreCase("Completed")) {
                 builder.setImage(buildingImage.get(1));
+                builder.setColor(Color.GREEN);
             } else if (buildingStatusString.get(2).equalsIgnoreCase("Completed")) {
                 builder.setImage(buildingImage.get(2));
+                builder.setColor(Color.GREEN);
             } else if (buildingStatusString.get(0).equalsIgnoreCase("Under Attack")) {
                 builder.setImage(buildingImage.get(0));
+                builder.setColor(Color.YELLOW);
             } else if (buildingStatusString.get(1).equalsIgnoreCase("Under Attack")) {
                 builder.setImage(buildingImage.get(1));
+                builder.setColor(Color.YELLOW);
             } else if (buildingStatusString.get(2).equalsIgnoreCase("Under Attack")) {
                 builder.setImage(buildingImage.get(2));
+                builder.setColor(Color.YELLOW);
             } else {
                 builder.setImage(buildingImage.get(0));
+                builder.setColor(Color.RED);
             }
         } catch (IOException e) {
             e.printStackTrace();
