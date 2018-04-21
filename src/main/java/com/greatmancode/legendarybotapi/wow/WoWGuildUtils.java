@@ -10,6 +10,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -65,7 +66,7 @@ public class WoWGuildUtils {
                     }
                 }
             }
-
+            eb.setColor(new Color(40,103,40));
             return eb.build();
         } catch (IOException e) {
             e.printStackTrace();

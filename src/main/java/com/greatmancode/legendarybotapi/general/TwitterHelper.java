@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -70,6 +71,7 @@ public class TwitterHelper {
                 builder.setAuthor(messageObject.getJSONObject("user").getString("screen_name"), "https://twitter.com/"+username);
                 builder.setTimestamp(cal.toInstant());
                 builder.setDescription(messageObject.getString("full_text"));
+                builder.setColor(new Color(29,161,242));
                 result = builder.build();
             }
         } catch (JSONException | java.text.ParseException | IOException e) {
