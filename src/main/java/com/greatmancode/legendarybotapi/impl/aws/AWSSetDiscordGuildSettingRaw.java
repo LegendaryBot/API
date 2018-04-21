@@ -14,7 +14,7 @@ public class AWSSetDiscordGuildSettingRaw implements RequestHandler<Map<String, 
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
         long guildId = Long.parseLong(pathParameters.get("guildId"));
         DiscordGuildHelper guildHelper = new DiscordGuildHelper();
-        guildHelper.setRawSetting(guildHelper.getDiscordGuild(guildId), new JSONObject(input.get("body")));
+        guildHelper.setRawSetting(guildHelper.getDiscordGuild(guildId), new JSONObject((String)input.get("body")));
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)
                 .build();
