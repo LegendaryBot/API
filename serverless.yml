@@ -175,6 +175,14 @@ functions:
           path: /guild/{guildId}/setting/{key}
           method: post
           private: true
+  set-guild-setting-raw:
+    handler: com.greatmancode.legendarybot.api.impl.aws.AWSSetDiscordGuildSettingRaw
+    timeout: 15
+    events:
+      - http:
+          path: /guild/{guildId}/settingRaw
+          method: post
+          private: true
   delete-guild-setting:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSDeleteDiscordGuildSetting
     timeout: 15

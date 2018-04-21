@@ -72,6 +72,11 @@ public class DiscordGuildHelper {
         DiscordGuildBackend.saveDiscordGuild(guild);
     }
 
+    public void setRawSetting(DiscordGuild guild, JSONObject json) {
+        guild.setJson(json.toString());
+        DiscordGuildBackend.saveDiscordGuild(guild);
+    }
+
 
     /*
         {
