@@ -18,25 +18,35 @@ public class ItemHelper {
         Item item = ItemBackend.getItem(id);
 
         if (item == null) {
-            HttpUrl url = new HttpUrl.Builder().scheme("https")
-                    .host(region + ".api.battle.net")
-                    .addPathSegments("/wow/item/" + id)
-                    .build();
-            Request webRequest = new Request.Builder().url(url).build();
-            try {
-                Response responseBattleNet = clientBattleNet.newCall(webRequest).execute();
+            item = getItemWeb(region, id,false);
+        }
+        return item;
+    }
+
+    private static Item getItemWeb(String region, long id, boolean alreadyTried) {
+        Item item = null;
+        HttpUrl url = new HttpUrl.Builder().scheme("https")
+                .host(region + ".api.battle.net")
+                .addPathSegments("/wow/item/" + id)
+                .build();
+        Request webRequest = new Request.Builder().url(url).build();
+        try {
+            Response responseBattleNet = clientBattleNet.newCall(webRequest).execute();
+            if (responseBattleNet.code() == 200) {
                 String itemRequest = responseBattleNet.body().string();
-                JSONObject jsonObject = new JSONObject(itemRequest);
-                if (!jsonObject.has("status")) {
-                    item = new ItemImpl();
-                    item.setid(id);
-                    item.setJson(itemRequest);
-                    ItemBackend.saveItem(item);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region, "id:" + id);
+                item = new ItemImpl();
+                item.setid(id);
+                item.setJson(itemRequest);
+                ItemBackend.saveItem(item);
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            //It timeouted, try again
+            if (!alreadyTried) {
+                getItemWeb(region,id,true);
+            }
+            UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region, "id:" + id);
         }
         return item;
     }
