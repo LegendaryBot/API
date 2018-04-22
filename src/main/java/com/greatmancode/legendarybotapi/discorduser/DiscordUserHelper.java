@@ -93,6 +93,7 @@ public class DiscordUserHelper {
             JSONObject character = (JSONObject) entry;
             DiscordUser user = userHelper.getDiscordUser(character.getLong("owner"));
             List<WoWCharacter> characterList = user.getCharacters();
+            characterList.clear();
             List<Long> guildIDList = new ArrayList<>();
             guildIDList.add(character.getLong("guild_id"));
             characterList.add(new WoWCharacter(character.getString("region"), character.getString("realm"), character.getString("name"), character.getString("guildName"), guildIDList));
