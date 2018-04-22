@@ -145,6 +145,14 @@ functions:
           path: /user/{userId}/character/{guildId}/{region}/{realm}/{character}
           method: post
           private: true
+  set-raw-character:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetRawCharacter
+    timeout: 30
+    events:
+      - http:
+          path: /user/rawCharacter
+          method: post
+          private: true
   get-auth-battlenet:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetOAuthLoginLink
     timeout: 15

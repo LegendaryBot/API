@@ -86,4 +86,19 @@ public class DiscordUserHelper {
         return found;
     }
 
+    public void rawSetMainCharacter(String json) {
+        JSONArray jsonArray = new JSONArray(json);
+        DiscordUserHelper userHelper = new DiscordUserHelper();
+        jsonArray.forEach(entry -> {
+            JSONObject character = (JSONObject) entry;
+            DiscordUser user = userHelper.getDiscordUser(character.getLong("owner"));
+            List<WoWCharacter> characterList = user.getCharacters();
+            List<Long> guildIDList = new ArrayList<>();
+            guildIDList.add(character.getLong("guild_id"));
+            characterList.add(new WoWCharacter(character.getString("region"), character.getString("realm"), character.getString("name"), character.getString("guildName"), guildIDList));
+            user.updateCharacters(characterList);
+            DiscordUserBackend.saveDiscordUser(user);
+        });
+    }
+
 }
