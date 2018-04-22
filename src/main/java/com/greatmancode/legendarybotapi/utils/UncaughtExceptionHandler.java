@@ -15,11 +15,12 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
     }
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        client.sendException(e);
+        sendException(e);
     }
 
     public void sendException(Throwable e, String... tags) {
         Arrays.stream(tags).forEach((v) -> client.addTag(v.split(":")[0], v.split(":")[1]));
+        client.setEnvironment(System.getenv("AWS_LAMBDA_FUNCTION_NAME").split("-")[1]);
         client.sendException(e);
         client.setTags(null);
     }
