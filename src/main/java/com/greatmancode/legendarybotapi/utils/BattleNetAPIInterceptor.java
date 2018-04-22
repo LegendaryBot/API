@@ -56,7 +56,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
      * Build an instance of the Interceptor
      */
     public BattleNetAPIInterceptor() {
-        try {
+        if (usKey == null) {
             if (System.getenv("US_KEY") != null)
                 usKey = System.getenv("US_KEY");
             else if (System.getenv("US_KEY_master") != null)
@@ -105,34 +105,18 @@ public class BattleNetAPIInterceptor implements Interceptor {
             if (usSecret == null || euSecret == null) {
                 throw new IllegalArgumentException("Blizzard API requires at least one API secret.");
             }
-
-            if (usService == null) {
-                usService = new ServiceBuilder(usKey)
-                        .apiSecret(usSecret)
-                        .build(new OAuthBattleNetApi("us"));
-                usToken = usService.getAccessTokenClientCredentialsGrant();
-                usTokenExpire = System.currentTimeMillis() + (usToken.getExpiresIn() * 1000);
-            }
-
-            if (euService == null) {
-                euService = new ServiceBuilder(euKey)
-                        .apiSecret(euSecret)
-                        .build(new OAuthBattleNetApi("eu"));
-                euToken = euService.getAccessTokenClientCredentialsGrant();
-                euTokenExpire = System.currentTimeMillis() + (euToken.getExpiresIn() * 1000);
-            }
-
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            UncaughtExceptionHandler.getHandler().sendException(e);
         }
+
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+
         HttpUrl url = null;
         if (chain.request().url().host().equals("us.api.battle.net") && chain.request().url().encodedPath().startsWith("/data/")) {
             //Data mode US
+
+
             try {
                 refreshToken();
 
