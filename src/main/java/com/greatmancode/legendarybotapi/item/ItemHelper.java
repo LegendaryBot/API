@@ -15,6 +15,7 @@ public class ItemHelper {
             .build();
 
     public static Item getItem(String region, long id) {
+        System.out.println("THE ID " + id);
         Item item = ItemBackend.getItem(id);
 
         if (item == null) {
