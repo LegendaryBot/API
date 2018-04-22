@@ -15,7 +15,6 @@ public class ItemHelper {
             .build();
 
     public static Item getItem(String region, long id) {
-        System.out.println("THE ID " + id);
         Item item = ItemBackend.getItem(id);
 
         if (item == null) {
@@ -35,9 +34,19 @@ public class ItemHelper {
             Response responseBattleNet = clientBattleNet.newCall(webRequest).execute();
             if (responseBattleNet.code() == 200) {
                 String itemRequest = responseBattleNet.body().string();
+                JSONObject itemObject = new JSONObject(itemRequest);
+                JSONObject finalObjectJSON = new JSONObject();
+                finalObjectJSON.put("id", id);
+                finalObjectJSON.put("name", itemObject.getString("name"));
+                finalObjectJSON.put("itemSpells",itemObject.getJSONArray("itemSpells"));
+                finalObjectJSON.put("quality", itemObject.getInt("quality"));
+                finalObjectJSON.put("icon", itemObject.getString("icon"));
+                finalObjectJSON.put("itemSubClass", itemObject.getInt("itemSubClass"));
+                finalObjectJSON.put("inventoryType", itemObject.getInt("inventoryType"));
+                finalObjectJSON.put("description", itemObject.getString("description"));
                 item = new ItemImpl();
                 item.setid(id);
-                item.setJson(itemRequest);
+                item.setJson(finalObjectJSON.toString());
                 ItemBackend.saveItem(item);
             }
 

@@ -15,7 +15,6 @@ public class AWSGetItemHandler implements RequestHandler<Map<String, Object>, Ap
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
         Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler.getHandler());
         Map<String,String> pathParameters = (Map<String,String>)input.get("pathParameters");
-        Arrays.toString(pathParameters.entrySet().toArray());
         String region = pathParameters.get("region");
         String id = pathParameters.get("id");
         Item item = ItemHelper.getItem(region,Long.parseLong(id));
