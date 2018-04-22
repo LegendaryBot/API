@@ -10,6 +10,7 @@ import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserBackend;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserHelper;
 import com.greatmancode.legendarybotapi.utils.OAuthBattleNetApi;
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import com.greatmancode.legendarybotapi.utils.WoWCharacter;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,6 +68,7 @@ public class OAuthHelper {
 
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e);
         }
     }
 

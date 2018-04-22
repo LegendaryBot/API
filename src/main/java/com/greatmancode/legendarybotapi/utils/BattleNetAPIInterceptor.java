@@ -122,12 +122,9 @@ public class BattleNetAPIInterceptor implements Interceptor {
                 euTokenExpire = System.currentTimeMillis() + (euToken.getExpiresIn() * 1000);
             }
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e);
         }
     }
 
@@ -141,6 +138,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+                UncaughtExceptionHandler.getHandler().sendException(e);
             }
             url = chain.request().url().newBuilder()
                     .addQueryParameter("locale", "en_US")
@@ -153,6 +151,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
                 refreshToken();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+                UncaughtExceptionHandler.getHandler().sendException(e);
             }
             url = chain.request().url().newBuilder()
                     .addQueryParameter("locale", "en_US")

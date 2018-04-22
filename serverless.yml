@@ -35,6 +35,7 @@ provider:
     TWITTER_KEY: ${env:TWITTER_KEY}
     TWITTER_SECRET: ${env:TWITTER_SECRET}
     WARCRAFTLOGS_KEY: ${env:WARCRAFTLOGS_KEY}
+    SENTRY_DSN: ${env:SENTRY_DSN}
   iamRoleStatements:
     - Effect: Allow
       Action:

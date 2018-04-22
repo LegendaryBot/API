@@ -1,5 +1,6 @@
 package com.greatmancode.legendarybotapi.general;
 
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import okhttp3.*;
@@ -76,6 +77,7 @@ public class TwitterHelper {
             }
         } catch (JSONException | java.text.ParseException | IOException e) {
             e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e,"region:" + region);
         }
         return result;
     }

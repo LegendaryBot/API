@@ -3,6 +3,7 @@ package com.greatmancode.legendarybotapi.discordguild;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUserHelper;
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import com.greatmancode.legendarybotapi.utils.WoWCharacter;
 import com.greatmancode.legendarybotapi.wow.WoWGuildUtils;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -251,6 +252,7 @@ public class DiscordGuildHelper {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                UncaughtExceptionHandler.getHandler().sendException(e, "discordGuild:" + discordGuild.getid());
             }
         }
         return (guildMembers.size() != 0) ? guildMembers : null;

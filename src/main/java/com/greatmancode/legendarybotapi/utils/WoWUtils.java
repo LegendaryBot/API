@@ -128,6 +128,7 @@ public class WoWUtils {
             return realmArray.getJSONObject(0).getString("timezone");
         } catch (IOException e) {
             e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e,"region:" + region, "realm:" + realm);
         }
         return null;
     }

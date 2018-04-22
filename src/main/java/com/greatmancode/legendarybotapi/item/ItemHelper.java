@@ -1,6 +1,7 @@
 package com.greatmancode.legendarybotapi.item;
 
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import okhttp3.*;
 import org.json.JSONObject;
 
@@ -34,6 +35,7 @@ public class ItemHelper {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region, "id:" + id);
             }
         }
         return item;

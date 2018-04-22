@@ -1,5 +1,6 @@
 package com.greatmancode.legendarybotapi.wow;
 
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import com.greatmancode.legendarybotapi.utils.WoWUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -70,6 +71,7 @@ public class WoWGuildUtils {
             return eb.build();
         } catch (IOException e) {
             e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e,"region:" + region, "realm:" + realm, "guild:" + guild);
         }
         return null;
     }

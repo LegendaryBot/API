@@ -1,6 +1,7 @@
 package com.greatmancode.legendarybotapi.wow;
 
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import okhttp3.HttpUrl;
@@ -46,6 +47,7 @@ public class WoWRealmUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region, "servername:" + serverName);
         }
         return null;
     }

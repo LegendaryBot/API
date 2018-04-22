@@ -1,5 +1,6 @@
 package com.greatmancode.legendarybotapi.general;
 
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.jsoup.Jsoup;
@@ -66,6 +67,7 @@ public class LegionBuildingHelper {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region);
         }
         return builder.isEmpty() ? null : builder.build();
     }

@@ -2,6 +2,7 @@ package com.greatmancode.legendarybotapi.characters;
 
 import com.greatmancode.legendarybotapi.utils.BattleNetAPIInterceptor;
 import com.greatmancode.legendarybotapi.utils.HeroClass;
+import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import com.greatmancode.legendarybotapi.utils.WoWUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import okhttp3.ConnectionPool;
@@ -312,7 +313,7 @@ public class CharacterHelper {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            //TODO error handling
+            UncaughtExceptionHandler.getHandler().sendException(e,"region:" + region, "realm:" + realm, "character:" + character);
         }
         return responseBody;
     }
