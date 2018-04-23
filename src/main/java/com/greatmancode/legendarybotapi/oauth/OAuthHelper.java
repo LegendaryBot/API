@@ -64,6 +64,7 @@ public class OAuthHelper {
             service.signRequest(token, request);
             Response response = service.execute(request);
             DiscordUserHelper userHelper = new DiscordUserHelper();
+            System.out.println(response.getBody());
             handleCharacterUpdate(region, userHelper.getDiscordUser(userId), response.getBody());
 
         } catch (IOException | InterruptedException | ExecutionException e) {
