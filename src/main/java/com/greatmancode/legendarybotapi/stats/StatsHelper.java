@@ -15,7 +15,7 @@ public class StatsHelper {
         jsonArray.forEach(entry -> {
             JSONObject jsonObject = (JSONObject) entry;
             MetricDatum datum = new MetricDatum()
-                    .withMetricName(jsonObject.getString("graph"))
+                    .withMetricName(jsonObject.getString("name"))
                     .withUnit(StandardUnit.Count)
                     .withValue(jsonObject.getDouble("value"));
 

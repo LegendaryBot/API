@@ -11,7 +11,7 @@ public class StatsTest {
     public void testStat() {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("graph", "TestGraph");
+        jsonObject.put("name", "TestGraph");
         jsonObject.put("value", 30.0);
         jsonArray.put(jsonObject);
         StatsHelper.addPoint(jsonArray.toString());
