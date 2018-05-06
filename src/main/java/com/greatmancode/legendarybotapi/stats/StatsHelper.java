@@ -14,13 +14,17 @@ public class StatsHelper {
         JSONArray jsonArray = new JSONArray(json);
         jsonArray.forEach(entry -> {
             JSONObject jsonObject = (JSONObject) entry;
+            Dimension dimension = new Dimension()
+                    .withName("Environment")
+                    .withValue(System.getenv("STATS_DIMENSION") != null ? System.getenv("STATS_DIMENSION") : "dev");
             MetricDatum datum = new MetricDatum()
                     .withMetricName(jsonObject.getString("name"))
                     .withUnit(StandardUnit.Count)
-                    .withValue(jsonObject.getDouble("value"));
+                    .withValue(jsonObject.getDouble("value"))
+                    .withDimensions(dimension);
 
             PutMetricDataRequest request = new PutMetricDataRequest()
-                    .withNamespace("LEGENDARYBOT")
+                    .withNamespace("LegendaryBot")
                     .withMetricData(datum);
 
             cw.putMetricData(request);

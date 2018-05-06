@@ -36,6 +36,7 @@ provider:
     TWITTER_SECRET: ${env:TWITTER_SECRET}
     WARCRAFTLOGS_KEY: ${env:WARCRAFTLOGS_KEY}
     SENTRY_DSN: ${env:SENTRY_DSN}
+    STATS_DIMENSION: ${self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Action:
