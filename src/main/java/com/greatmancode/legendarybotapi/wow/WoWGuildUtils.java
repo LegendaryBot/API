@@ -75,4 +75,85 @@ public class WoWGuildUtils {
         }
         return null;
     }
+
+    public static MessageEmbed getRaiderIORank(String region, String realmName, String guild) {
+        //https://raider.io/api/v1/guilds/profile
+        HttpUrl url = new HttpUrl.Builder()
+                .host("raider.io")
+                .scheme("https")
+                .addPathSegments("api/v1/guilds/profile")
+                .addQueryParameter("region", region)
+                .addQueryParameter("realm", realmName)
+                .addQueryParameter("name", guild)
+                .addQueryParameter("fields", "raid_rankings")
+                .build();
+        Request request = new Request.Builder().url(url).build();
+        String result;
+        try {
+            result = client.newCall(request).execute().body().string();
+            if ("null".equals(result)) {
+                return null;
+            }
+            JSONObject obj = new JSONObject(result);
+
+            if (obj.has("error")) {
+                return null;
+            }
+            String realm = obj.getString("realm");
+            JSONObject raidRankings = obj.getJSONObject("raid_rankings");
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setTitle(guild + "-" + realm + " Raid Rankings");
+            JSONObject theNighthold = raidRankings.getJSONObject("the-nighthold");
+            JSONObject theEmeraldNightmare = raidRankings.getJSONObject("the-emerald-nightmare");
+            JSONObject trialOfValor = raidRankings.getJSONObject("trial-of-valor");
+            JSONObject tombOfSargeras = raidRankings.getJSONObject("tomb-of-sargeras");
+            JSONObject antorusTheBurningThrone = raidRankings.getJSONObject("antorus-the-burning-throne");
+            eb.addField("Antorus The Burning Throne", formatRanking(antorusTheBurningThrone), true);
+            eb.addField("Tomb of Sargeras", formatRanking(tombOfSargeras), true);
+            eb.addField("The Nighthold", formatRanking(theNighthold), true);
+            eb.addField("Trial of Valor", formatRanking(trialOfValor), true);
+            eb.addField("The Emerald Nightmare", formatRanking(theEmeraldNightmare), true);
+            return eb.build();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region, "realm:" + realmName, "guild:" + guild);
+        }
+        return null;
+    }
+
+    private static String formatRanking(JSONObject json) {
+        JSONObject normal = json.getJSONObject("normal");
+        JSONObject heroic = json.getJSONObject("heroic");
+        JSONObject mythic = json.getJSONObject("mythic");
+        StringBuilder builder = new StringBuilder();
+        if (normal.getInt("world") != 0 && heroic.getInt("world") == 0 && mythic.getInt("world") == 0) {
+            builder.append("**Normal**\n");
+            subFormatRanking(normal, builder);
+        } else if (heroic.getInt("world") != 0 && mythic.getInt("world") == 0) {
+            builder.append("\n**Heroic**\n");
+            subFormatRanking(heroic,builder);
+        } else if (mythic.getInt("world") != 0){
+            builder.append("\n**Mythic**\n");
+            subFormatRanking(mythic, builder);
+        }
+
+
+
+
+
+
+        return builder.toString();
+    }
+
+    private static void subFormatRanking(JSONObject difficulty, StringBuilder builder) {
+        if (difficulty.getInt("world") != 0) {
+            builder.append("World: **" + difficulty.getInt("world") + "**\n");
+            builder.append("Region: **" + difficulty.getInt("region") + "**\n");
+            builder.append("Realm: **" + difficulty.getInt("realm") + "**\n");
+        } else {
+            builder.append("**Not started**\n");
+        }
+
+    }
 }

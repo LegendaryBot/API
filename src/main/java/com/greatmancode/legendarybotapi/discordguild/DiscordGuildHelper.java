@@ -264,4 +264,11 @@ public class DiscordGuildHelper {
         String guildName = getSetting(discordGuild, "GUILD_NAME");
         return WoWGuildUtils.getLastestWarcraftLog(region, serverName, guildName);
     }
+
+    public MessageEmbed getGuildRanking(DiscordGuild discordGuild) {
+        String serverName = getSetting(discordGuild, "WOW_SERVER_NAME");
+        String region = getSetting(discordGuild, "WOW_REGION_NAME");
+        String guildName = getSetting(discordGuild, "GUILD_NAME");
+        return WoWGuildUtils.getRaiderIORank(region, serverName, guildName);
+    }
 }
