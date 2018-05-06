@@ -28,6 +28,7 @@ public class OverwatchHelper {
             if (json.has("error")) {
                 return null;
             }
+            region = region.toLowerCase();
             if (!json.has(region)) {
                 return null;
             }
