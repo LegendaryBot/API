@@ -235,6 +235,13 @@ functions:
           path: /stats
           method: post
           private: true
+  get-overwatch-stats:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetOverwatchStats
+    timeout: 15
+    events:
+      - http:
+          path: /overwatch/{region}/{battletag}
+          method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
