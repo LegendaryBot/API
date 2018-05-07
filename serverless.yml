@@ -127,7 +127,7 @@ functions:
     timeout: 15
     events:
       - http:
-          path: /legionbuilding/{region}
+          path: /region/{region}/legionbuilding
           method: get
   get-discord-user-main-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordUserMainCharacter
@@ -248,6 +248,12 @@ functions:
     events:
       - http:
           path: /guild/{guildId}/rank
+          method: get
+  get-region-token-price:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetTokenPrice
+    events:
+      - http:
+          path: /region/{region}/wowtoken
           method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

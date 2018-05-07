@@ -19,7 +19,8 @@ import java.util.TimeZone;
 public class WoWGuildUtils {
 
 
-    private static OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+            .build();
 
 
     public static MessageEmbed getLastestWarcraftLog(String region, String realm, String guild) {
