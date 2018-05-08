@@ -1,7 +1,6 @@
 package com.greatmancode.legendarybotapi.tests;
 
 import com.greatmancode.legendarybotapi.wow.WowRegionUtils;
-import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;

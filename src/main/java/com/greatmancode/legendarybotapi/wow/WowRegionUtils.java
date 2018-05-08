@@ -16,7 +16,7 @@ public class WowRegionUtils {
             .build();
 
     public static MessageEmbed getTokenPrice(String region) {
-        region = region.toUpperCase();
+        String regionName = region.toUpperCase();
         Request webRequest = new Request.Builder().url("https://data.wowtoken.info/snapshot.json").build();
 
 
@@ -26,20 +26,20 @@ public class WowRegionUtils {
                 return null;
             }
             JSONObject object = new JSONObject(request);
-            if ("US".equalsIgnoreCase(region)) {
-                region = "NA";
+            if ("US".equalsIgnoreCase(regionName)) {
+                regionName = "NA";
             }
-            if (!object.has(region)) {
+            if (!object.has(regionName)) {
                 return null;
             }
-            JSONObject regionJSON = (JSONObject) object.get(region);
+            JSONObject regionJSON = (JSONObject) object.get(regionName);
             JSONObject prices = (JSONObject) regionJSON.get("formatted");
             String price = (String) prices.get("buy");
             String minPrice = (String) prices.get("24min");
             String maxPrice = (String) prices.get("24max");
             double pctPrice = Double.parseDouble(prices.get("24pct").toString());
             EmbedBuilder eb = new EmbedBuilder();
-            eb.setTitle("Price for 1 WoW Token in the " + region + " region");
+            eb.setTitle("Price for 1 WoW Token in the " + regionName + " region");
             eb.setThumbnail("http://wow.zamimg.com/images/wow/icons/large/wow_token01.jpg");
             eb.setColor(new Color(255,215,0));
             eb.addField("Current Price", price, true);
@@ -50,7 +50,7 @@ public class WowRegionUtils {
             return eb.build();
         } catch (IOException e) {
             e.printStackTrace();
-            UncaughtExceptionHandler.getHandler().sendException(e, "region:" + region);
+            UncaughtExceptionHandler.getHandler().sendException(e, "region:" + regionName);
         }
         return null;
     }

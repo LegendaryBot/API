@@ -7,7 +7,6 @@ import com.greatmancode.legendarybotapi.item.ItemHelper;
 import com.greatmancode.legendarybotapi.utils.UncaughtExceptionHandler;
 import com.serverless.ApiGatewayResponse;
 
-import java.util.Arrays;
 import java.util.Map;
 
 public class AWSGetItemHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {

@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public class StatsHelper {
 
-    final static AmazonCloudWatch cw =
+    private final static AmazonCloudWatch cw =
             AmazonCloudWatchClientBuilder.standard().withRegion(System.getenv("AWS_REGION") != null ? System.getenv("AWS_REGION") : "us-east-1").build();
     public static void addPoint(String json) {
         JSONArray jsonArray = new JSONArray(json);

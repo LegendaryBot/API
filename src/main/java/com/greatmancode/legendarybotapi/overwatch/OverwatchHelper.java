@@ -15,6 +15,7 @@ public class OverwatchHelper {
             .build();
 
     public static MessageEmbed getOverwatchStats(String region, String battletag) {
+        String regionName = region.toLowerCase();
         String user = battletag.substring(0, 1).toUpperCase() + battletag.substring(1);
         System.out.println("https://owapi.net/api/v3/u/"+user+"/stats");
         Request webRequest = new Request.Builder().url("https://owapi.net/api/v3/u/"+user+"/stats").build();
@@ -28,15 +29,14 @@ public class OverwatchHelper {
             if (json.has("error")) {
                 return null;
             }
-            region = region.toLowerCase();
-            if (!json.has(region)) {
+            if (!json.has(regionName)) {
                 return null;
             }
-            if (json.getJSONObject(region).getJSONObject("stats").isNull("competitive")) {
+            if (json.getJSONObject(regionName).getJSONObject("stats").isNull("competitive")) {
                 return null;
             }
 
-            JSONObject competitive = json.getJSONObject(region).getJSONObject("stats").getJSONObject("competitive");
+            JSONObject competitive = json.getJSONObject(regionName).getJSONObject("stats").getJSONObject("competitive");
 
             JSONObject competitiveStats = (JSONObject) competitive.get("overall_stats");
             EmbedBuilder eb = new EmbedBuilder();
