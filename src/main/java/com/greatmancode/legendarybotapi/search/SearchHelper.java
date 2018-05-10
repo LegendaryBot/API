@@ -52,15 +52,7 @@ public class SearchHelper {
     }
 
     public static boolean isSearchLoaded() {
-        boolean result = false;
-        try {
-            IndexReader reader = DirectoryReader.open(ramDirectory);
-            result = reader.numDocs() != 0;
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return ramDirectory.listAll().length != 0;
     }
     public static void addRealm(JSONObject realm) {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
