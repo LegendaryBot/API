@@ -78,13 +78,13 @@ public class LegendaryCheckHandler {
             for (Object memberRaw : members) {
                 JSONObject member = (JSONObject) memberRaw;
                 JSONObject character = member.getJSONObject("character");
-                long level = (Long) character.get("level");
+                int level = character.getInt("level");
                 if (level != 110) {
                     continue;
                 }
                 JSONObject realmInfo = WoWUtils.getRealmInformation(regionName,(String)character.get("realm"));
                 if (realmInfo != null) {
-                    characterRealmMap.put((String)character.get("name"), (String) realmInfo.get("slug"));
+                    characterRealmMap.put(character.getString("name"), realmInfo.getString("slug"));
                 }
             }
 
@@ -93,8 +93,8 @@ public class LegendaryCheckHandler {
             List<String> doneCharacter = new ArrayList<>();
             for (Object newsEntryRaw : news) {
                 JSONObject newsEntry = (JSONObject) newsEntryRaw;
-                String character = (String) newsEntry.get("character");
-                long newsTimestamp = (long) newsEntry.get("timestamp");
+                String character = newsEntry.getString("character");
+                long newsTimestamp = newsEntry.getLong("timestamp");
 
                 if (doneCharacter.contains(character)) {
                     continue;
@@ -137,7 +137,7 @@ public class LegendaryCheckHandler {
                             characterResponse.close();
                             JSONObject characterJSON = new JSONObject(characterJSONRaw);
                             if (!characterJSON.has("status")) {
-                                long memberLastModified = (Long) characterJSON.get("lastModified");
+                                long memberLastModified = characterJSON.getLong("lastModified");
                                 long dbLastModified = getPlayerInventoryDate(regionName, realm, character);
                                 if (memberLastModified > dbLastModified) {
                                     setPlayerInventoryDate(regionName, realm, character, memberLastModified);
