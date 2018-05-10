@@ -35,6 +35,7 @@ public class DynamoDBHelper {
 
     public static void saveItem(Item item) {
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_ITEM"));
+        System.out.println(item);
         table.putItem(new com.amazonaws.services.dynamodbv2.document.Item().withPrimaryKey("id", item.getid()).withJSON("json", item.getJson()));
     }
 
