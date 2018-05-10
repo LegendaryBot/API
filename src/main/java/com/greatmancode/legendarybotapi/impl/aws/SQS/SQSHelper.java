@@ -15,6 +15,7 @@ public class SQSHelper {
     public static void sendMessage(String queue, String value, Map<String,String> metadata) {
         Map<String, MessageAttributeValue> metadataAWS = new HashMap<>();
         metadata.forEach((k,v) -> metadataAWS.put(k, new MessageAttributeValue().withStringValue(v)));
+        System.out.println(metadataAWS);
         String queueURL = sqs.getQueueUrl(queue).getQueueUrl();
         SendMessageRequest request = new SendMessageRequest()
                 .withQueueUrl(queueURL)
