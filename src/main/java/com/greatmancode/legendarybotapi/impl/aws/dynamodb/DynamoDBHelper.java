@@ -91,7 +91,7 @@ public class DynamoDBHelper {
         long time = -1;
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"));
         com.amazonaws.services.dynamodbv2.document.Item item = table.getItem("id", String.join("-",region,realm,characterName));
-        if (item != null) {
+        if (item != null && !item.isNull("inventoryDate")) {
             time = item.getLong("inventoryDate");
         }
         return time;
@@ -101,7 +101,7 @@ public class DynamoDBHelper {
         long time = -1;
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"));
         com.amazonaws.services.dynamodbv2.document.Item item = table.getItem("id", String.join("-",region,realm,characterName));
-        if (item != null) {
+        if (item != null && !item.isNull("newsDate")) {
             time = item.getLong("newsDate");
         }
         return time;
