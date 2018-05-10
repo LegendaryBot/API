@@ -1,5 +1,6 @@
 package com.greatmancode.legendarybotapi.utils;
 
+import com.greatmancode.legendarybotapi.search.SearchHelper;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -131,5 +132,27 @@ public class WoWUtils {
             UncaughtExceptionHandler.getHandler().sendException(e,"region:" + region, "realm:" + realm);
         }
         return null;
+    }
+
+    public static JSONObject getRealmInformation(String regionName, String realm) {
+        if (!SearchHelper.isSearchLoaded()) {
+            HttpUrl url = new HttpUrl.Builder().scheme("https")
+                    .host(regionName + ".api.battle.net")
+                    .addPathSegments("/wow/realm/status")
+                    .build();
+            Request request = new Request.Builder().url(url).build();
+            try {
+                JSONObject jsonObject = new JSONObject(clientBattleNet.newCall(request).execute().body().string());
+                jsonObject.getJSONArray("realms").forEach(realmEntry -> {
+                    JSONObject realmJSON = (JSONObject) realmEntry;
+                    SearchHelper.addRealm(realmJSON);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                UncaughtExceptionHandler.getHandler().sendException(e,"region:" + regionName, "realm:" + realm);
+            }
+
+        }
+        return SearchHelper.getRealmInfo(realm);
     }
 }

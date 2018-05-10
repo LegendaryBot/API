@@ -2,6 +2,7 @@ package com.greatmancode.legendarybotapi.discordguild;
 
 import com.greatmancode.legendarybotapi.impl.aws.dynamodb.DynamoDBHelper;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,5 +27,13 @@ public class DiscordGuildBackend {
             memoryGuildBackend.put(guild.getid(), guild);
         }
 
+    }
+
+    public static Collection<DiscordGuild> getDiscordGuilds() {
+        if (System.getenv("AWS_EXECUTION_ENV") != null) {
+            return DynamoDBHelper.getGuilds();
+        } else {
+            return memoryGuildBackend.values();
+        }
     }
 }

@@ -64,6 +64,23 @@
       </dependency>
       <dependency>
           <groupId>com.amazonaws</groupId>
+          <artifactId>aws-java-sdk-sqs</artifactId>
+          <version>1.11.311</version>
+      </dependency>
+      <dependency>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-java-sdk-sns</artifactId>
+          <version>1.11.311</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-events -->
+      <dependency>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-lambda-java-events</artifactId>
+          <version>2.1.0</version>
+      </dependency>
+
+      <dependency>
+          <groupId>com.amazonaws</groupId>
           <artifactId>aws-java-sdk-cloudwatch</artifactId>
           <version>1.11.311</version>
       </dependency>
@@ -76,6 +93,16 @@
           <groupId>io.sentry</groupId>
           <artifactId>sentry</artifactId>
           <version>1.7.3</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.lucene</groupId>
+          <artifactId>lucene-core</artifactId>
+          <version>7.3.0</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.lucene</groupId>
+          <artifactId>lucene-queryparser</artifactId>
+          <version>7.3.0</version>
       </dependency>
       <dependency>
           <groupId>org.junit.jupiter</groupId>
