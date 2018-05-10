@@ -160,7 +160,7 @@ public class LegendaryCheckHandler {
                                                 //We got a legendary!
                                                 Map<String, String> metadata = new HashMap<>();
                                                 metadata.put("name", character);
-                                                metadata.put("server","id:"+ id + "");
+                                                metadata.put("server",id + "");
                                                 metadata.put("channel", channelName);
                                                 QueueBackend.sendMessage(System.getenv("SQS_QUEUE_NAME"),WoWItemUtils.buildEmbed(character, HeroClass.values()[characterJSON.getInt("class")] ,itemJson).toJSONObject().toString(), metadata);
                                             }
