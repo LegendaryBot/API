@@ -90,9 +90,11 @@ provider:
     - Effect: Allow
       Action:
         - SNS:Publish
-        - SNS:ListTopics
       Resource: { "Fn::Join" : [":", ["arn:aws:sns:${opt:region, self:provider.region}", { "Ref" : "AWS::AccountId" }, "${self:provider.environment.SNS_LEGENDARYCHECK}" ] ]  }
-
+    - Effect: Allow
+      Action:
+        - SNS:ListTopics
+      Resource: "*"
 plugins:
   - serverless-domain-manager
 
