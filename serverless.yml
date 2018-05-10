@@ -254,12 +254,12 @@ functions:
           path: /region/{region}/wowtoken
           method: get
   handle-legendary-check:
-    handler: com.greatmancode.legendaryapi.impl.aws.AWSHandleLegendaryCheck
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSHandleLegendaryCheck
     timeout: 120
     events:
       - sns: ${self:provider.environment.SNS_LEGENDARYCHECK}
   schedule-legendary-check:
-    handler: com.greatmancode.legendaryapi.impl.aws.AWSScheduleLegendaryCheck
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSScheduleLegendaryCheck
     timeout: 120
     events:
       - schedule: rate(20 minutes)
