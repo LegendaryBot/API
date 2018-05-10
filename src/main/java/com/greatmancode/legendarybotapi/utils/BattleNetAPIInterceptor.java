@@ -113,6 +113,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
 
         HttpUrl url = null;
+        System.out.println("ORIGINAL URL:" + chain.request().url().toString());
         if (chain.request().url().host().equals("us.api.battle.net") && chain.request().url().encodedPath().startsWith("/data/")) {
             //Data mode US
 
@@ -152,7 +153,7 @@ public class BattleNetAPIInterceptor implements Interceptor {
                     .addQueryParameter("locale", "en_US")
                     .build();
         }
-
+        System.out.println("Final URL: " + url);
         Request request = chain.request().newBuilder().url(url).build();
         Response response = chain.proceed(request);
         return response;

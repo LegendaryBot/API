@@ -11,6 +11,7 @@ public class AWSHandleLegendaryCheck implements RequestHandler<SNSEvent,Void> {
     @Override
     public Void handleRequest(SNSEvent input, Context context) {
         String message = input.getRecords().get(0).getSNS().getMessage();
+        System.out.println("SNS MESSAGE:" + message);
         try {
             LegendaryCheckHandler.handleGuildLegendaryCheck(Long.parseLong(message));
         } catch (IOException e) {
