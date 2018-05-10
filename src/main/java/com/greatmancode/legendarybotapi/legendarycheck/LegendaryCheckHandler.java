@@ -51,8 +51,8 @@ public class LegendaryCheckHandler {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new BattleNetAPIInterceptor())
                     .build();
-            String regionName = helper.getSetting(guild, "WOW_SERVER_NAME");
-            String serverName = helper.getSetting(guild, "WOW_REGION_NAME");
+            String regionName = helper.getSetting(guild, "WOW_REGION_NAME");
+            String serverName = helper.getSetting(guild, "WOW_SERVER_NAME");
             String guildName = helper.getSetting(guild,"GUILD_NAME");
             String channelName = helper.getSetting(guild, "legendary_check");
             HttpUrl url = new HttpUrl.Builder()
@@ -211,8 +211,8 @@ public class LegendaryCheckHandler {
     private static boolean isValidLegendaryCheck(DiscordGuild guild) {
         DiscordGuildHelper helper = new DiscordGuildHelper();
         String channelName = helper.getSetting(guild, "legendary_check");
-        String regionName = helper.getSetting(guild, "WOW_SERVER_NAME");
-        String serverName = helper.getSetting(guild, "WOW_REGION_NAME");
+        String regionName = helper.getSetting(guild, "WOW_REGION_NAME");
+        String serverName = helper.getSetting(guild, "WOW_SERVER_NAME");
         String guildName = helper.getSetting(guild,"GUILD_NAME");
         return channelName != null && regionName != null && serverName != null && guildName != null;
     }
