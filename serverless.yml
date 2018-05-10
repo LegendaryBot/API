@@ -323,7 +323,7 @@ resources:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
     LegendaryCheckSQS:
-      Type: AWS::SQS:Queue
+      Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:provider.environment.SQS_QUEUE_NAME}
 
