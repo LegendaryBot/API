@@ -162,7 +162,7 @@ public class LegendaryCheckHandler {
                                                 metadata.put("name", character);
                                                 metadata.put("server", id + "");
                                                 metadata.put("channel", channelName);
-                                                QueueBackend.sendMessage(System.getenv("SQS_QUEUE_NAME"),WoWItemUtils.buildEmbed(character, HeroClass.values()[((Long) characterJSON.get("class")).intValue()] ,itemJson).toJSONObject().toString(), metadata);
+                                                QueueBackend.sendMessage(System.getenv("SQS_QUEUE_NAME"),WoWItemUtils.buildEmbed(character, HeroClass.values()[characterJSON.getInt("class")] ,itemJson).toJSONObject().toString(), metadata);
                                             }
                                         }
                                     }
