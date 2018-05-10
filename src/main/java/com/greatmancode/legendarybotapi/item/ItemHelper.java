@@ -43,7 +43,10 @@ public class ItemHelper {
                 finalObjectJSON.put("icon", itemObject.getString("icon"));
                 finalObjectJSON.put("itemSubClass", itemObject.getInt("itemSubClass"));
                 finalObjectJSON.put("inventoryType", itemObject.getInt("inventoryType"));
-                finalObjectJSON.put("description", itemObject.getString("description"));
+                if (!itemObject.getString("description").equalsIgnoreCase("")) {
+                    finalObjectJSON.put("description", itemObject.getString("description"));
+                }
+
                 item = new ItemImpl();
                 item.setid(id);
                 item.setJson(finalObjectJSON.toString());
