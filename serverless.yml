@@ -312,10 +312,6 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: inventoryDate
-            AttributeType: N
-          - AttributeName: newsDate
-            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
