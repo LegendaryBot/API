@@ -39,7 +39,7 @@ public class ItemHelper {
                 finalObjectJSON.put("id", id);
                 finalObjectJSON.put("name", itemObject.getString("name"));
                 if (itemObject.getJSONArray("itemSpells").length() > 0 && itemObject.getJSONArray("itemSpells").getJSONObject(0).has("spell") && !itemObject.getJSONArray("itemSpells").getJSONObject(0).getJSONObject("spell").getString("description").equals("") ) {
-                    finalObjectJSON.put("itemSpells",itemObject.getJSONArray("itemSpells"));
+                    finalObjectJSON.put("itemSpells",itemObject.getJSONArray("itemSpells").getJSONObject(0));
                 }
                 finalObjectJSON.put("quality", itemObject.getInt("quality"));
                 finalObjectJSON.put("icon", itemObject.getString("icon"));

@@ -130,6 +130,11 @@ public class DiscordGuildHelper {
         }
      */
     public JSONObject processRankUpdate(DiscordGuild discordGuild, String json) {
+        System.out.println("GUILD ID: " + discordGuild.getid());
+        System.out.println("CONFIG:");
+        System.out.println(discordGuild.getJson());
+        System.out.println("The received JSON:");
+        System.out.println(json);
         JSONObject guildJSON = new JSONObject(json);
         JSONObject guildInformation = guildJSON.getJSONObject("guild");
         Map<String, JSONObject> guildRanks = new HashMap<>();
@@ -222,6 +227,8 @@ public class DiscordGuildHelper {
             });
 
             resultJSON.put("roleChange",roleChange);
+            System.out.println("The output JSON");
+            System.out.println(resultJSON.toString());
             return resultJSON;
         }
 

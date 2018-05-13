@@ -140,6 +140,10 @@ public class LegendaryCheckHandler {
                                 long memberLastModified = characterJSON.getLong("lastModified");
                                 long dbLastModified = getPlayerInventoryDate(regionName, realm, character);
                                 if (memberLastModified > dbLastModified) {
+                                    boolean firstRun = false;
+                                    if (dbLastModified == 0 || dbLastModified == -1) {
+                                        firstRun = true;
+                                    }
                                     setPlayerInventoryDate(regionName, realm, character, memberLastModified);
                                     //We check the items
                                     JSONArray feedArray = characterJSON.getJSONArray("feed");
@@ -155,7 +159,7 @@ public class LegendaryCheckHandler {
                                                 continue;
                                             }
                                             String itemJson = ItemHelper.getItem(regionName, itemID).getJson();
-                                            if (isItemLegendary(itemJson)) {
+                                            if (isItemLegendary(itemJson) && !firstRun) {
                                                 System.out.println(character + " just looted a legendary");
                                                 //We got a legendary!
                                                 Map<String, String> metadata = new HashMap<>();
