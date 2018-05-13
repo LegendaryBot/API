@@ -158,6 +158,11 @@ public class DiscordGuildHelper {
 
         //We retrieve the ranks in the configuration
         JSONObject discordGuildJSON = getSetting(discordGuild, "wowranks");
+        if (discordGuildJSON == null ){
+            unsetSetting(discordGuild,"wowlink_scheduler");
+            return new JSONObject();
+
+        }
         Map<Integer,String> discordRankMapping = new HashMap<>();
         for (int i = 0; i < 10; i++) {
             if (discordGuildJSON.has(i + "")) {
