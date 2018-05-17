@@ -142,7 +142,7 @@ public class LegendaryCheckHandler {
                                 if (memberLastModified > dbLastModified) {
                                     boolean firstRun = false;
                                     if (dbLastModified == 0 || dbLastModified == -1) {
-                                        firstRun = true;
+                                        //firstRun = true;
                                     }
                                     setPlayerInventoryDate(regionName, realm, character, memberLastModified);
                                     //We check the items
