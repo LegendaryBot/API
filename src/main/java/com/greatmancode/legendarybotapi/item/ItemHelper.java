@@ -24,11 +24,13 @@ public class ItemHelper {
     }
 
     private static Item getItemWeb(String region, long id, boolean alreadyTried) {
+
         Item item = null;
         HttpUrl url = new HttpUrl.Builder().scheme("https")
                 .host(region + ".api.battle.net")
                 .addPathSegments("/wow/item/" + id)
                 .build();
+        System.out.println(url);
         Request webRequest = new Request.Builder().url(url).build();
         try {
             Response responseBattleNet = clientBattleNet.newCall(webRequest).execute();
