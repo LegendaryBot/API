@@ -35,10 +35,15 @@ public class LegendaryCheckHandler {
     private static final long[] itemIDIgnore = {147451,151462, 152626, 154880};
 
     public static void handleLegendaryCheck() {
+        int i = 0;
         DiscordGuildBackend.getDiscordGuilds().forEach(guild -> {
+            int time = i % 19;
             if (isValidLegendaryCheck(guild)) {
                 System.out.println("Running legendary check for  + " + guild.getid());
-                MessageHelper.sendMessage(System.getenv("SNS_LEGENDARYCHECK"), guild.getid() + "");
+                Map<String, String> metadata = new HashMap<>();
+                metadata.put("timer", (System.currentTimeMillis() + (time * 60000)) + "");
+                QueueBackend.sendMessage(System.getenv("SQS_LEGENDARYCHECK_QUEUE"),guild.getid() + "",metadata);
+                //MessageHelper.sendMessage(System.getenv("SNS_LEGENDARYCHECK"), guild.getid() + "");
             }
         });
     }

@@ -40,6 +40,7 @@ provider:
     STATS_DIMENSION: ${self:provider.stage}
     SQS_QUEUE_NAME: LegendaryBot-LegendaryCheck-${self:provider.stage}
     SNS_LEGENDARYCHECK: LegendaryBot-LegendaryCheck-${self:provider.stage}
+    SQS_LEGENDARYCHECK_QUEUE: LegendaryBot-LegendaryCheck-Scheduler-${self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -87,6 +88,14 @@ provider:
         - sqs:SendMessage
         - sqs:ListQueues
       Resource: "arn:aws:sqs:${opt:region, self:provider.region}:*:${self:provider.environment.SQS_QUEUE_NAME}"
+    - Effect: Allow
+      Action:
+        - sqs:GetQueueUrl
+        - sqs:SendMessage
+        - sqs:ListQueues
+        - sqs:DeleteMessage
+        - sqs:GetQueueAttributes
+      Resource: "arn:aws:sqs:${opt:region, self:provider.region}:*:${self:provider.environment.SQS_LEGENDARYCHECK_QUEUE}"
     - Effect: Allow
       Action:
         - SNS:Publish
@@ -266,7 +275,11 @@ functions:
     timeout: 120
     events:
       - schedule: rate(30 minutes)
-
+  queue-legendary-check:
+    handler: com.greatmancode.legendarybotapi.impl.aws.AWSQueryBacklogLegendaryCheck
+    timeout: 60
+    events:
+      - schedule: rate(1 minute)
 resources:
   Resources:
     DynamoDbTable:
@@ -325,6 +338,10 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:provider.environment.SQS_QUEUE_NAME}
+    LegendaryCheckSQSScheduler:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.environment.SQS_LEGENDARYCHECK_QUEUE_NAME}
 
 
 custom:
