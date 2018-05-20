@@ -29,9 +29,11 @@ public class AWSQueryBacklogLegendaryCheck implements RequestHandler<Void,Void> 
     }
 
     private void process(GetQueueUrlResult queueUrlResult, int messageCount) {
+        System.out.println("Retrieving the " + messageCount + " messages");
         ReceiveMessageRequest request = new ReceiveMessageRequest(queueUrlResult.getQueueUrl())
                 .withMaxNumberOfMessages(Math.min(messageCount,10));
         sqs.receiveMessage(request).getMessages().forEach(message -> {
+            System.out.println("FOUND " + message.getBody());
             MessageHelper.sendMessage(System.getenv("SNS_LEGENDARYCHECK"), message.getBody());
             sqs.deleteMessage(queueUrlResult.getQueueUrl(), message.getReceiptHandle());
         });

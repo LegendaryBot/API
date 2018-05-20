@@ -95,7 +95,7 @@ provider:
         - sqs:ListQueues
         - sqs:DeleteMessage
         - sqs:GetQueueAttributes
-      Resource: "arn:aws:sqs:${opt:region, self:provider.region}:*:${self:provider.environment.SQS_LEGENDARYCHECK_QUEUE}"
+      Resource: { "Fn::Join" : [":", ["arn:aws:sqs:${opt:region, self:provider.region}", { "Ref" : "AWS::AccountId" }, "${self:provider.environment.SQS_LEGENDARYCHECK_QUEUE}" ] ]  }
     - Effect: Allow
       Action:
         - SNS:Publish
