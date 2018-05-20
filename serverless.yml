@@ -258,7 +258,7 @@ functions:
           method: get
   handle-legendary-check:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSHandleLegendaryCheck
-    timeout: 120
+    timeout: 300
     events:
       - sns: ${self:provider.environment.SNS_LEGENDARYCHECK}
   schedule-legendary-check:
