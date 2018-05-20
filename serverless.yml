@@ -265,7 +265,7 @@ functions:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSScheduleLegendaryCheck
     timeout: 120
     events:
-      - schedule: rate(20 minutes)
+      - schedule: rate(30 minutes)
 
 resources:
   Resources:
