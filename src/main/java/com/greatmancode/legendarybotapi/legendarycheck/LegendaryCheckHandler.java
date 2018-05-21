@@ -127,12 +127,12 @@ public class LegendaryCheckHandler {
             long timeMinus7Days = date.toInstant(ZoneOffset.UTC).toEpochMilli();
 
             characterRealmMap.forEach((character,realm) -> {
-                realm = realm.toLowerCase();
+                //realm = realm.toLowerCase();
                 System.out.println("WE ARE INSIDE");
-                System.out.println(String.join("-",realm,realm,character));
+                System.out.println(String.join("-",regionName,realm,character));
                 System.out.println("THE NEWS DATE:" + characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate"));
                 System.out.println("THE GENRATED NEWS DATE:" + timeMinus7Days);
-                if (characterDynamoDB.containsKey(String.join("-",realm,realm,character)) &&
+                if (characterDynamoDB.containsKey(String.join("-",regionName,realm,character)) &&
                         characterDynamoDB.get(String.join("-",regionName,realm,character)).containsKey("newsDate") &&
                         characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate") > timeMinus7Days) {
                     //The character is active, let's do the legendary check.
