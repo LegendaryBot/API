@@ -109,8 +109,11 @@ public class LegendaryCheckHandler {
                 if (doneCharacter.contains(character)) {
                     continue;
                 }
+                System.out.println ("GENERATED NAME " + String.join("-",regionName,serverName,character));
                 if (characterDynamoDB.containsKey(String.join("-",regionName,serverName,character))) {
+                    System.out.println("The DB contains the name");
                     long currentNewsTimestamp = characterDynamoDB.get(String.join("-",regionName,serverName,character)).get("newsDate");
+                    System.out.println("His timestamp is" + currentNewsTimestamp);
                     if (newsTimestamp > currentNewsTimestamp) {
                         setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
                     }
@@ -125,8 +128,11 @@ public class LegendaryCheckHandler {
 
             characterRealmMap.forEach((character,realm) -> {
                 realm = realm.toLowerCase();
-
-                if (characterDynamoDB.containsKey(String.join("-",realm,serverName,character)) &&
+                System.out.println("WE ARE INSIDE");
+                System.out.println(String.join("-",realm,realm,character));
+                System.out.println("THE NEWS DATE:" + characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate"));
+                System.out.println("THE GENRATED NEWS DATE:" + timeMinus7Days);
+                if (characterDynamoDB.containsKey(String.join("-",realm,realm,character)) &&
                         characterDynamoDB.get(String.join("-",regionName,realm,character)).containsKey("newsDate") &&
                         characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate") > timeMinus7Days) {
                     //The character is active, let's do the legendary check.
