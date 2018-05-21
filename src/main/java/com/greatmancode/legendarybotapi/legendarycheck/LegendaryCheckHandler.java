@@ -118,6 +118,7 @@ public class LegendaryCheckHandler {
                         setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
                     }
                 } else {
+                    System.out.println("Not found, adding " +String.join("-",regionName,serverName,character));
                     characterDynamoDB.put(String.join("-",regionName,serverName,character), new HashMap<>());
                     characterDynamoDB.get(String.join("-",regionName,serverName,character)).put("newsDate", newsTimestamp);
                     setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
@@ -132,7 +133,7 @@ public class LegendaryCheckHandler {
                 //realm = realm.toLowerCase();
                 System.out.println("WE ARE INSIDE");
                 System.out.println(String.join("-",regionName,realm,character));
-                System.out.println("THE NEWS DATE:" + characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate"));
+                //System.out.println("THE NEWS DATE:" + characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate"));
                 System.out.println("THE GENRATED NEWS DATE:" + timeMinus7Days);
                 if (characterDynamoDB.containsKey(String.join("-",regionName,realm,character)) &&
                         characterDynamoDB.get(String.join("-",regionName,realm,character)).containsKey("newsDate") &&
