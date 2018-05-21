@@ -93,6 +93,11 @@ public class LegendaryCheckHandler {
                 }
             }
 
+
+            //We load from DynamoDB the character information in Batch.
+            Map<String, Map<String, Long>> characterDynamoDB = DynamoDBHelper.getBatchCharacter(regionName, characterRealmMap);
+            System.out.println("I found " + characterDynamoDB.size() + " characters in DynamoDB out of " + characterRealmMap.size());
+
             //We do the check to see if a character is active so we query it's last actions.
             JSONArray news = (JSONArray) guildJSON.get("news");
             List<String> doneCharacter = new ArrayList<>();
@@ -104,19 +109,26 @@ public class LegendaryCheckHandler {
                 if (doneCharacter.contains(character)) {
                     continue;
                 }
-
-                long currentNewsTimestamp = getPlayerNewsDate(regionName,serverName,character);
-                if (newsTimestamp > currentNewsTimestamp) {
-                    setPlayerNewsDate(regionName,serverName,character,newsTimestamp);
+                if (characterDynamoDB.containsKey(String.join("-",regionName,serverName,character))) {
+                    long currentNewsTimestamp = characterDynamoDB.get(String.join("-",regionName,serverName,character)).get("newsDate");
+                    if (newsTimestamp > currentNewsTimestamp) {
+                        setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
+                    }
+                } else {
+                    setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
                 }
                 doneCharacter.add(character);
             }
 
             LocalDateTime date = LocalDateTime.now().minusDays(7);
             long timeMinus7Days = date.toInstant(ZoneOffset.UTC).toEpochMilli();
+
             characterRealmMap.forEach((character,realm) -> {
                 realm = realm.toLowerCase();
-                if (getPlayerNewsDate(regionName,realm,character) > timeMinus7Days) {
+
+                if (characterDynamoDB.containsKey(String.join("-",realm,serverName,character)) &&
+                        characterDynamoDB.get(String.join("-",regionName,realm,character)).containsKey("newsDate") &&
+                        characterDynamoDB.get(String.join("-",regionName,realm,character)).get("newsDate") > timeMinus7Days) {
                     //The character is active, let's do the legendary check.
                     HttpUrl characterUrl = new HttpUrl.Builder()
                             .scheme("https")
@@ -143,7 +155,10 @@ public class LegendaryCheckHandler {
                             JSONObject characterJSON = new JSONObject(characterJSONRaw);
                             if (!characterJSON.has("status")) {
                                 long memberLastModified = characterJSON.getLong("lastModified");
-                                long dbLastModified = getPlayerInventoryDate(regionName, realm, character);
+                                long dbLastModified = -1;
+                                if (characterDynamoDB.get(String.join("-",regionName,realm,character)).containsKey("inventoryDate")) {
+                                    dbLastModified = characterDynamoDB.get(String.join("-",regionName,realm,character)).get("inventoryDate");
+                                }
                                 if (memberLastModified > dbLastModified) {
                                     boolean firstRun = false;
                                     if (dbLastModified == 0 || dbLastModified == -1) {
@@ -193,16 +208,8 @@ public class LegendaryCheckHandler {
         }
     }
 
-    private static long getPlayerInventoryDate(String regionName, String serverName, String character) {
-        return DynamoDBHelper.getCharacterInventoryDate(regionName, serverName, character);
-    }
-
     private static void setPlayerInventoryDate(String regionName, String serverName, String character, long inventoryDate) {
         DynamoDBHelper.setCharacterInventoryDate(regionName, serverName, character, inventoryDate);
-    }
-
-    private static long getPlayerNewsDate(String regionName, String serverName, String character) {
-        return DynamoDBHelper.getCharacterNewsDate(regionName,serverName,character);
     }
 
     private static void setPlayerNewsDate(String regionName, String serverName, String character, long newsTimestamp) {

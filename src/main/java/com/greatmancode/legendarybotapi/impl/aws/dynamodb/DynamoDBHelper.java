@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
+import com.amazonaws.services.dynamodbv2.model.KeysAndAttributes;
 import com.greatmancode.legendarybotapi.discordguild.DiscordGuild;
 import com.greatmancode.legendarybotapi.discordguild.DiscordGuildImpl;
 import com.greatmancode.legendarybotapi.discorduser.DiscordUser;
@@ -12,7 +13,9 @@ import com.greatmancode.legendarybotapi.item.Item;
 import com.greatmancode.legendarybotapi.item.ItemImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DynamoDBHelper {
@@ -116,5 +119,42 @@ public class DynamoDBHelper {
     public static void setCharacterNewsDate(String region, String realm, String characterName, long newsDate) {
         Table table = dynamoDB.getTable(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"));
         table.updateItem(new UpdateItemSpec().withPrimaryKey("id",String.join("-",region,realm,characterName)).addAttributeUpdate(new AttributeUpdate("newsDate").addNumeric(newsDate)));
+    }
+
+    public static Map<String, Map<String, Long>> getBatchCharacter(String region, Map<String, String> characters) {
+        Map<String, Map<String, Long>> characterList = new HashMap<>();
+        TableKeysAndAttributes tableKeysAndAttributes = new TableKeysAndAttributes(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"));
+        characters.forEach((k,v) ->  tableKeysAndAttributes.addPrimaryKey(new PrimaryKey("id", String.join("-",region,v,k))));
+        BatchGetItemOutcome outcome = dynamoDB.batchGetItem(tableKeysAndAttributes);
+        Map<String, KeysAndAttributes> unprocessed = null;
+        do {
+            for (String tableName : outcome.getTableItems().keySet()) {
+                System.out.println("Items in table " + tableName);
+                List<com.amazonaws.services.dynamodbv2.document.Item> items = outcome.getTableItems().get(tableName);
+                for (com.amazonaws.services.dynamodbv2.document.Item item : items) {
+                    System.out.println(item);
+                    characterList.put(item.getString("id"), new HashMap<>());
+                    if (item.hasAttribute("newsDate")) {
+                        characterList.get(item.getString("id")).put("newsDate",item.getLong("newsDate"));
+                    }
+                    if (item.hasAttribute("inventoryDate")) {
+                        characterList.get(item.getString("id")).put("inventoryDate", item.getLong("inventoryDate"));
+                    }
+                }
+            }
+
+            unprocessed = outcome.getUnprocessedKeys();
+
+            if (unprocessed.isEmpty()) {
+                System.out.println("No unprocessed keys found");
+            }
+            else {
+                System.out.println("Retrieving the unprocessed keys");
+                outcome = dynamoDB.batchGetItemUnprocessed(unprocessed);
+            }
+
+        } while (!unprocessed.isEmpty());
+
+        return characterList;
     }
 }

@@ -115,6 +115,7 @@ functions:
   get-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetCharacterHandler
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /character/{region}/{realm}/{character}
@@ -122,6 +123,7 @@ functions:
   get-item:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetItemHandler
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /item/{region}/{id}
@@ -129,6 +131,7 @@ functions:
   get-lasttweet:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetLastTweetHandler
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /twitter/{region}
@@ -136,6 +139,7 @@ functions:
   get-legion-building:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetLegionBuildingHandler
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /region/{region}/legionbuilding
@@ -143,6 +147,7 @@ functions:
   get-discord-user-main-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordUserMainCharacter
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /user/{userId}/character/{guildId}
@@ -150,6 +155,7 @@ functions:
   get-discord-user-all-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetGuildCharactersForUser
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /user/{userId}/character/all/{guildName}
@@ -157,6 +163,7 @@ functions:
   set-discord-user-main-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordUserMainCharacter
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /user/{userId}/character/{guildId}/{region}/{realm}/{character}
@@ -165,6 +172,7 @@ functions:
   set-raw-character:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetRawCharacter
     timeout: 30
+    memory: 512
     events:
       - http:
           path: /user/rawCharacter
@@ -173,6 +181,7 @@ functions:
   get-auth-battlenet:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetOAuthLoginLink
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /oauth/login/{region}/{id}
@@ -180,6 +189,7 @@ functions:
   get-auth-battlenetcallback:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetBattleNetCallback
     timeout: 30
+    memory: 512
     events:
       - http:
           path: /oauth/battlenetcallback
@@ -187,6 +197,7 @@ functions:
   get-guild-setting:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordGuildSetting
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/setting/{key}
@@ -195,6 +206,7 @@ functions:
   set-guild-setting:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordGuildSetting
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/setting/{key}
@@ -203,6 +215,7 @@ functions:
   set-guild-setting-raw:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSSetDiscordGuildSettingRaw
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/settingRaw
@@ -211,6 +224,7 @@ functions:
   delete-guild-setting:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSDeleteDiscordGuildSetting
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/setting/{key}
@@ -219,6 +233,7 @@ functions:
   get-guild-rank-update:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetDiscordGuildRankUpdate
     timeout: 30
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/rankUpdate
@@ -227,6 +242,7 @@ functions:
   get-realm-status:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetRealmStatus
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /server/{region}/{realm}/status
@@ -234,6 +250,7 @@ functions:
   get-guild-latest-log:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetGuildLatestLog
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/getLatestLog
@@ -241,6 +258,7 @@ functions:
   add-stats-point:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSAddStatsPoint
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /stats
@@ -249,6 +267,7 @@ functions:
   get-overwatch-stats:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetOverwatchStats
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /overwatch/{region}/{battletag}
@@ -256,12 +275,15 @@ functions:
   get-guild-raid-rank:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetGuildRaidRank
     timeout: 15
+    memory: 512
     events:
       - http:
           path: /guild/{guildId}/rank
           method: get
   get-region-token-price:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSGetTokenPrice
+    memory: 512
+    timeout: 15
     events:
       - http:
           path: /region/{region}/wowtoken
@@ -269,16 +291,19 @@ functions:
   handle-legendary-check:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSHandleLegendaryCheck
     timeout: 300
+    memory: 512
     events:
       - sns: ${self:provider.environment.SNS_LEGENDARYCHECK}
   schedule-legendary-check:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSScheduleLegendaryCheck
     timeout: 120
+    memory: 512
     events:
       - schedule: rate(30 minutes)
   queue-legendary-check:
     handler: com.greatmancode.legendarybotapi.impl.aws.AWSQueryBacklogLegendaryCheck
     timeout: 60
+    memory: 512
     events:
       - schedule: rate(1 minute)
 resources:
