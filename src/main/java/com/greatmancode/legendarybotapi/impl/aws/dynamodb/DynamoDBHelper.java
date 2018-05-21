@@ -123,8 +123,26 @@ public class DynamoDBHelper {
 
     public static Map<String, Map<String, Long>> getBatchCharacter(String region, Map<String, String> characters) {
         Map<String, Map<String, Long>> characterList = new HashMap<>();
-        TableKeysAndAttributes tableKeysAndAttributes = new TableKeysAndAttributes(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"));
-        characters.forEach((k,v) ->  tableKeysAndAttributes.addPrimaryKey(new PrimaryKey("id", String.join("-",region,v,k))));
+        final TableKeysAndAttributes[] tableKeysAndAttributes = {new TableKeysAndAttributes(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"))};
+        final int[] i = {0};
+        characters.forEach((k,v) ->  {
+            tableKeysAndAttributes[0].addPrimaryKey(new PrimaryKey("id", String.join("-",region,v,k)));
+            i[0]++;
+            if (i[0] == 100) {
+                processBatch(characterList, tableKeysAndAttributes[0]);
+                tableKeysAndAttributes[0] = new TableKeysAndAttributes(System.getenv("DYNAMODB_TABLE_LEGENDARYCHECK"));;
+                i[0] = 0;
+            }
+        });
+        if (i[0] > 0) {
+            processBatch(characterList, tableKeysAndAttributes[0]);
+        }
+
+
+        return characterList;
+    }
+
+    private static void processBatch(Map<String, Map<String, Long>> characterList, TableKeysAndAttributes tableKeysAndAttributes){
         BatchGetItemOutcome outcome = dynamoDB.batchGetItem(tableKeysAndAttributes);
         Map<String, KeysAndAttributes> unprocessed = null;
         do {
@@ -154,7 +172,5 @@ public class DynamoDBHelper {
             }
 
         } while (!unprocessed.isEmpty());
-
-        return characterList;
     }
 }
