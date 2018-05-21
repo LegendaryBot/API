@@ -118,6 +118,8 @@ public class LegendaryCheckHandler {
                         setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
                     }
                 } else {
+                    characterDynamoDB.put(String.join("-",regionName,serverName,character), new HashMap<>());
+                    characterDynamoDB.get(String.join("-",regionName,serverName,character)).put("newsDate", newsTimestamp);
                     setPlayerNewsDate(regionName, serverName, character, newsTimestamp);
                 }
                 doneCharacter.add(character);
