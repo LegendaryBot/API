@@ -129,16 +129,9 @@ public class CharacterHelper {
                             .build();
                     Request battlenetRequest = new Request.Builder().url(battleneturl).build();
                     String battlenetResult = clientBattleNet.newCall(battlenetRequest).execute().body().string();
-                    String apAmount = getAP(battlenetResult);
 
                     JSONObject gear = jsonObject.getJSONObject("gear");
                     eb.addField("iLVL", gear.get("item_level_equipped") + "/" + gear.get("item_level_total"), true);
-
-                    if (apAmount != null) {
-                        eb.addField("Artifact Power", gear.get("artifact_traits").toString() + " / " + apAmount + " " + "AP Gathered", true);
-                    } else {
-                        eb.addField("Artifact Power", gear.get("artifact_traits").toString(), true);
-                    }
 
 
 
